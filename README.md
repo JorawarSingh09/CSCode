@@ -97,10 +97,10 @@ A:
 #### Grabbing mech 
 Talk to the mech team about the grabbing mech. How do they need it to function? How should the servo work> DO they want set movement or adjustable movement. Ask them everything you can and write the QA below (ReadMe File)
 
-Q: what sort of functions do you need on it
-A: Ther servo needs to open and close the grabber. 
+Q: What sort of functions do you need on it
+A: The servo needs to be able to open and close the servo
 
-Q: Is there a certain degree of closing you need
-A: Just close the arm entirely, 0 to 1
+Q: Is there a certain degree of closing you need?
+A: Closing and opening the arm entirely (0 & 1).
 
 ### Michaels Arm Mech 
