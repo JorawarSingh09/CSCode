@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -44,7 +46,8 @@ public class JOmni extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-
+    private DcMotor leftLinearSlides = null;
+    private DcMotor rightLinearSlides = null;
 
     @Override
     public void runOpMode() {
@@ -57,11 +60,15 @@ public class JOmni extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+        leftLinearSlides = hardwareMap.get(DcMotor.class, "l_linear_slides");
+        rightLinearSlides = hardwareMap.get(DcMotor.class, "r_linear_slides");
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -78,6 +85,10 @@ public class JOmni extends LinearOpMode {
             double axial = -gamepad1.left_stick_y; // Note: pushing stick forward gives negative value
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
+
+            //Linear Slide controls
+            float slideUp = gamepad1.right_trigger;
+            float slideDown = gamepad1.left_trigger;
 
             // Combine the joystick requests for each axis-motion to determine each wheel's
             // power.
@@ -100,9 +111,21 @@ public class JOmni extends LinearOpMode {
                 rightBackPower /= max;
             }
 
-            // TODO
-            // Control the linear slide motor using gamepad triggers
-            //HINT gamepad1.right_trigger gamepad1.left_trigger
+            //Linear slide code
+            if(slideUp > slideDown) {
+                leftLinearSlides.setPower(slideUp);
+                rightLinearSlides.setPower(-1 * slideUp);
+            }
+            else if(slideUp == slideDown) {
+                leftLinearSlides.setPower(0);
+                rightLinearSlides.setPower(0);
+            }
+            else{
+                leftLinearSlides.setPower(-1 * slideDown);
+                rightLinearSlides.setPower(slideDown);
+            }
+
+
 
             leftFrontDrive.setPower(leftFrontPower);
             rightFrontDrive.setPower(rightFrontPower);
