@@ -44,7 +44,7 @@ public class JOmni extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    private DcMotor linearSlide = null;
+
 
     @Override
     public void runOpMode() {
@@ -57,7 +57,6 @@ public class JOmni extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-        linearSlide = hardwareMap.get(DcMotor.class, "linear_slide");
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -116,7 +115,6 @@ public class JOmni extends LinearOpMode {
             telemetry.addData("Back left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Trigger Values", "%4.2f, %4.2f", gamepad1.right_trigger, gamepad1.left_trigger);
             telemetry.update();
-            teleme
         }
     }
 }
