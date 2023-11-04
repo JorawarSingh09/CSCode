@@ -86,19 +86,21 @@ What you basically need to do is SET the POWER of the linearSlides motor to the 
 
 
 ### Task 3: What do we need?
-#### Bhargav
+#### Linear Slides
 Talk to the mech team about linear slides. How do they need it to function? do they need it to stop at certain levels. Move at a certain speed. Ask them everything you can and write the QA below (ReadMe File)
-Q:
+Q: 
 A:
 
 Q:
 A:
 
-#### Kianna
+#### Grabbing mech 
 Talk to the mech team about the grabbing mech. How do they need it to function? How should the servo work> DO they want set movement or adjustable movement. Ask them everything you can and write the QA below (ReadMe File)
 
-Q:
-A:
+Q: what sort of functions do you need on it
+A: Ther servo needs to open and close the grabber. 
 
-Q:
-A:
+Q: Is there a certain degree of closing you need
+A: Just close the arm entirely, 0 to 1
+
+### Michaels Arm Mech 

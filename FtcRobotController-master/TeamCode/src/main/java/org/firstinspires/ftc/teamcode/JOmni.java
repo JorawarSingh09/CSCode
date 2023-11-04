@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -34,6 +35,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
+@Config
 @TeleOp(name = "Basic: Jomni", group = "Linear OpMode")
 public class JOmni extends LinearOpMode {
 
@@ -114,6 +116,7 @@ public class JOmni extends LinearOpMode {
             telemetry.addData("Back left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Trigger Values", "%4.2f, %4.2f", gamepad1.right_trigger, gamepad1.left_trigger);
             telemetry.update();
+            teleme
         }
     }
 }
