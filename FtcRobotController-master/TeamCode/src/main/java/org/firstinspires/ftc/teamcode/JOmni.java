@@ -48,6 +48,7 @@ public class JOmni extends LinearOpMode {
     private DcMotor rightBackDrive = null;
     private DcMotor leftLinearSlides = null;
     private DcMotor rightLinearSlides = null;
+    private Servo claw = null;
 
     @Override
     public void runOpMode() {
@@ -62,6 +63,7 @@ public class JOmni extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
         leftLinearSlides = hardwareMap.get(DcMotor.class, "l_linear_slides");
         rightLinearSlides = hardwareMap.get(DcMotor.class, "r_linear_slides");
+        claw = hardwareMap.get(Servo.class, "claw");
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -69,6 +71,8 @@ public class JOmni extends LinearOpMode {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
         leftLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
         rightLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
+        claw.setPosition(0);
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -86,9 +90,13 @@ public class JOmni extends LinearOpMode {
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
 
-            //Linear Slide controls
+            // Linear Slide controls
             float slideUp = gamepad1.right_trigger;
             float slideDown = gamepad1.left_trigger;
+
+            // Claw controls
+            boolean clawOpen = gamepad1.x;
+            boolean clawClose = gamepad1.b;
 
             // Combine the joystick requests for each axis-motion to determine each wheel's
             // power.
@@ -111,7 +119,7 @@ public class JOmni extends LinearOpMode {
                 rightBackPower /= max;
             }
 
-            //Linear slide code
+            // Linear slides code
             if(slideUp > slideDown) {
                 leftLinearSlides.setPower(slideUp);
                 rightLinearSlides.setPower(-1 * slideUp);
@@ -123,6 +131,14 @@ public class JOmni extends LinearOpMode {
             else{
                 leftLinearSlides.setPower(-1 * slideDown);
                 rightLinearSlides.setPower(slideDown);
+            }
+
+            // Claw code
+            if(clawOpen > clawClose) {
+                claw.setPosition(0);
+            }
+            else{
+                claw.setPosition(1);
             }
 
 
