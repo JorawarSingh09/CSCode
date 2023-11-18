@@ -96,7 +96,6 @@ public class JOmni extends LinearOpMode {
 
             // Claw controls
             boolean clawOpen = gamepad1.x;
-            boolean clawClose = gamepad1.b;
 
             // Combine the joystick requests for each axis-motion to determine each wheel's
             // power.
@@ -134,7 +133,7 @@ public class JOmni extends LinearOpMode {
             }
 
             // Claw code
-            if(clawOpen > clawClose) {
+            if(clawOpen) {
                 claw.setPosition(0);
             }
             else{
