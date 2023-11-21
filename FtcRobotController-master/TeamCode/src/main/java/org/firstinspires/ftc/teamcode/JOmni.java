@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Mechanims.LinearSlides;
+
 /*
  * This file contains an example of a Linear "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -46,13 +48,10 @@ public class JOmni extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    private DcMotor leftLinearSlides = null;
-    private DcMotor rightLinearSlides = null;
-    private Servo claw = null;
 
-    @Override
-    public void runOpMode() {
+    private LinearSlides linearSlides;
 
+    private void setDrive(){
         // Initialize the hardware variables. Note that the strings used here must
         // correspond
         // to the names assigned during the robot configuration step on the DS or RC
@@ -61,18 +60,47 @@ public class JOmni extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-        leftLinearSlides = hardwareMap.get(DcMotor.class, "l_linear_slides");
-        rightLinearSlides = hardwareMap.get(DcMotor.class, "r_linear_slides");
-        claw = hardwareMap.get(Servo.class, "claw");
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
-        claw.setPosition(0);
+    }
 
+    private double[] drive(double axial, double lateral, double yaw){
+        double max;
+
+        double leftFrontPower = axial + lateral + yaw;
+        double rightFrontPower = axial - lateral - yaw;
+        double leftBackPower = axial - lateral + yaw;
+        double rightBackPower = axial + lateral - yaw;
+
+        // Normalize the values so no wheel power exceeds 100%
+        // This ensures that the robot maintains the desired motion.
+        max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
+        double[] drivePower = {leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
+        return drivePower;
+    }
+
+    @Override
+    public void runOpMode() {
+
+        setDrive();
+        linearSlides = new LinearSlides(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -82,8 +110,6 @@ public class JOmni extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            double max;
-
             // POV Mode uses left joystick to go forward & strafe, and right joystick to
             // rotate.
             double axial = -gamepad1.left_stick_y; // Note: pushing stick forward gives negative value
@@ -94,63 +120,15 @@ public class JOmni extends LinearOpMode {
             float slideUp = gamepad1.right_trigger;
             float slideDown = gamepad1.left_trigger;
 
-            // Claw controls
-            boolean clawOpen = gamepad1.x;
-
-            // Combine the joystick requests for each axis-motion to determine each wheel's
-            // power.
-            // Set up a variable for each drive wheel to save the power level for telemetry.
-            double leftFrontPower = axial + lateral + yaw;
-            double rightFrontPower = axial - lateral - yaw;
-            double leftBackPower = axial - lateral + yaw;
-            double rightBackPower = axial + lateral - yaw;
-
-            // Normalize the values so no wheel power exceeds 100%
-            // This ensures that the robot maintains the desired motion.
-            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-            max = Math.max(max, Math.abs(leftBackPower));
-            max = Math.max(max, Math.abs(rightBackPower));
-
-            if (max > 1.0) {
-                leftFrontPower /= max;
-                rightFrontPower /= max;
-                leftBackPower /= max;
-                rightBackPower /= max;
+            if(gamepad1.right_bumper) {
+                linearSlides.setPosition(linearSlides.getPosition() + 100);
             }
 
-            // Linear slides code
-            if(slideUp > slideDown) {
-                leftLinearSlides.setPower(slideUp);
-                rightLinearSlides.setPower(-1 * slideUp);
-            }
-            else if(slideUp == slideDown) {
-                leftLinearSlides.setPower(0);
-                rightLinearSlides.setPower(0);
-            }
-            else{
-                leftLinearSlides.setPower(-1 * slideDown);
-                rightLinearSlides.setPower(slideDown);
-            }
-
-            // Claw code
-            if(clawOpen) {
-                claw.setPosition(0);
-            }
-            else{
-                claw.setPosition(1);
-            }
-
-
-
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
-
+            double[] drivePower = drive(axial, lateral, yaw);
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-            telemetry.addData("Back left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            telemetry.addData("Front left/Right", "%4.2f, %4.2f", drivePower[0], drivePower[1]);
+            telemetry.addData("Back left/Right", "%4.2f, %4.2f", drivePower[2], drivePower[3]);
             telemetry.addData("Trigger Values", "%4.2f, %4.2f", gamepad1.right_trigger, gamepad1.left_trigger);
             telemetry.update();
         }

@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Mechanims.LinearSlides;
+
 /*
  * This file contains an example of a Linear "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -50,6 +52,7 @@ public class Jauto extends LinearOpMode {
     private DcMotor leftLinearSlides = null;
     private DcMotor rightLinearSlides = null;
     private Servo claw = null;
+    private LinearSlides linearSlides = null;
 
     private void drive(double lf, double rf, double lb, double rb){
         double max;
@@ -90,17 +93,14 @@ public class Jauto extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-        leftLinearSlides = hardwareMap.get(DcMotor.class, "l_linear_slides");
-        rightLinearSlides = hardwareMap.get(DcMotor.class, "r_linear_slides");
-        claw = hardwareMap.get(Servo.class, "claw");
+
+        linearSlides = new LinearSlides(hardwareMap);
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightLinearSlides.setDirection(DcMotorSimple.Direction.FORWARD);
-        claw.setPosition(0);
+
 
 
         telemetry.addData("Status", "Initialized");
@@ -112,17 +112,7 @@ public class Jauto extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             if(canRun) {
-                drive(1, 1, 1, 1);
 
-                sleep(2000);
-
-                drive(1, 0, 1, 0);
-
-
-                sleep(1000);
-
-
-                drive(0, 0, 0, .0);
                 canRun = false;
             }
             // Show the elapsed game time and wheel power.
