@@ -71,14 +71,17 @@ public class LinearSlides {
         leftLinearSlide.setPower(0.1);
         rightLinearSlide.setPower(0.1);
 
+        leftLinearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightLinearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     public void bottomPosition(){
-        setPosition(0, 0.3);
+        setPosition(0, 0.4);
     }
 
     public void topPosition(){
-        setPosition(1550, 0.7);
+        setPosition(1500, 0.6);
     }
 
     public int[] getPosition() {
