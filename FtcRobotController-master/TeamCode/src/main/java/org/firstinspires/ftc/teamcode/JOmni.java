@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Mechanims.GrabberArm;
 import org.firstinspires.ftc.teamcode.Mechanims.LinearSlides;
 
 /*
@@ -43,13 +46,16 @@ import org.firstinspires.ftc.teamcode.Mechanims.LinearSlides;
 @TeleOp(name = "Basic: Jomni", group = "Linear OpMode")
 public class JOmni extends LinearOpMode {
 
+    //Remove before Comp
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    TelemetryPacket pk = new TelemetryPacket();
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-
-    private LinearSlides linearSlides;
+    private LinearSlides linearSlides = null;
+    private GrabberArm grabberArm = null;
 
     private void setDrive(){
         // Initialize the hardware variables. Note that the strings used here must
@@ -96,13 +102,50 @@ public class JOmni extends LinearOpMode {
         return drivePower;
     }
 
+    private void telemetry(){
+        // Show the elapsed game time and wheel power.
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+//            telemetry.addData("Front left/Right", "%4.2f, %4.2f", drivePower[0], drivePower[1]);
+//            telemetry.addData("Back left/Right", "%4.2f, %4.2f", drivePower[2], drivePower[3]);
+//            telemetry.addData("Trigger Values", "%d, %d", gamepad1.right_trigger, gamepad1.left_trigger);
+        telemetry.addData("Linear Slide Position left/right: ", "%d, %d",
+                linearSlides.getPosition()[0], linearSlides.getPosition()[1]);
+        telemetry.addData("Arm Position: ", "%d", grabberArm.getArm());
+        telemetry.addData("Wrist Position: ", "%4.2f", grabberArm.getWrist());
+        telemetry.addData("Claw Position: ", "%4.2f", grabberArm.getClaw());
+
+
+        pk.put("Status", "Run Time: " + runtime.toString());
+
+
+        dashboard.sendTelemetryPacket(pk);
+        telemetry.update();
+    }
+
+    /**
+     * LS MAX: 1500
+     *
+     * At top: arm 511, wrist 0
+     *
+     * at drop: arm 834, wrist 0.5
+     *
+     * at pickup: arm 0, wrist 0
+     *
+     * drive, arm 90
+     */
+    public void pickupPosition(){
+        grabberArm.pickupPosition();
+        linearSlides.bottomPosition();
+    }
     @Override
     public void runOpMode() {
 
         setDrive();
         linearSlides = new LinearSlides(hardwareMap);
+        grabberArm = new GrabberArm(hardwareMap);
 
         telemetry.addData("Status", "Initialized");
+        pk.put("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
@@ -116,21 +159,21 @@ public class JOmni extends LinearOpMode {
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
 
-            // Linear Slide controls
-            float slideUp = gamepad1.right_trigger;
-            float slideDown = gamepad1.left_trigger;
-
-            if(gamepad1.right_bumper) {
-                linearSlides.setPosition(linearSlides.getPosition() + 100);
+            if(gamepad1.right_trigger > 0){
+                grabberArm.openClaw();
             }
 
-            double[] drivePower = drive(axial, lateral, yaw);
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Front left/Right", "%4.2f, %4.2f", drivePower[0], drivePower[1]);
-            telemetry.addData("Back left/Right", "%4.2f, %4.2f", drivePower[2], drivePower[3]);
-            telemetry.addData("Trigger Values", "%4.2f, %4.2f", gamepad1.right_trigger, gamepad1.left_trigger);
-            telemetry.update();
+            if(gamepad1.left_trigger > 0){
+                grabberArm.closeClaw();
+            }
+
+            if(gamepad1.a){
+
+            }
+
+            drive(axial, lateral, yaw);
+            telemetry();
         }
     }
 }
+
