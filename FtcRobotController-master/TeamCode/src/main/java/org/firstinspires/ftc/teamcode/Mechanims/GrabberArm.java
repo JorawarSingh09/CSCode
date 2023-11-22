@@ -74,7 +74,7 @@ public class GrabberArm {
     }
     public void pickupPosition(){
         wrist.setPosition(0);
-
+        openClaw();
         //how fast the arm moves
         double power = 0.6;
         arm.setTargetPosition(0);
@@ -92,6 +92,7 @@ public class GrabberArm {
     public void topPosition(){
        // At top: arm 511, wrist 0
         wrist.setPosition(0);
+        claw.setPosition(0);
 
         //how fast the arm moves
         double power = 0.6;
@@ -114,6 +115,28 @@ public class GrabberArm {
         //how fast the arm moves
         double power = 0.6;
         arm.setTargetPosition(835);
+
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        arm.setPower(power);
+
+        while (arm.isBusy()) {
+            // do some stuff here i guess
+        }
+
+        // Stop the motors after reaching the position
+        arm.setPower(0.1);
+
+    }
+
+    public void startPosition(){
+        // at drop: arm 834, wrist 0.5
+        wrist.setPosition(1);
+        claw.setPosition(0);
+
+        //how fast the arm moves
+        double power = 0.6;
+        arm.setTargetPosition(0);
 
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
