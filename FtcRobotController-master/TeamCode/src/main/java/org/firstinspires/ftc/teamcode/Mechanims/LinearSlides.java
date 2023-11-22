@@ -1,13 +1,22 @@
 package org.firstinspires.ftc.teamcode.Mechanims;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class LinearSlides {
     //Motors
     private DcMotor leftLinearSlide;
     private DcMotor rightLinearSlide;
+
+    private double Kp = 0.1; // Proportional coefficient
+    private double Ki = 0.01; // Integral coefficient
+    private double Kd = 0.05; // Derivative coefficient
+    ElapsedTime timer = new ElapsedTime();
+    private double integralSum = 0;
+    private double lastError = 0;
 
     public LinearSlides(HardwareMap hm){
         leftLinearSlide = hm.get(DcMotor.class, "l_linear_slides");
@@ -30,12 +39,21 @@ public class LinearSlides {
         rightLinearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    public void manualDrive(float left, float right){
+        leftLinearSlide.setPower(left);
+        rightLinearSlide.setPower((right));
+    }
+
     public void changePosition(int pos){
         // do nothing if linear slides are already at the bottom
         if(leftLinearSlide.getCurrentPosition() < 20 && pos < 0){
             return;
         }
-        double power = 0.4;
+        setPosition(leftLinearSlide.getCurrentPosition() + pos, 0.4);
+    }
+
+    public void setPosition(int pos, double power){
+
         leftLinearSlide.setTargetPosition(leftLinearSlide.getCurrentPosition() + pos);
         rightLinearSlide.setTargetPosition(rightLinearSlide.getCurrentPosition() + pos);
 
@@ -53,54 +71,16 @@ public class LinearSlides {
         leftLinearSlide.setPower(0.1);
         rightLinearSlide.setPower(0.1);
 
-        // Switch back to RUN_USING_ENCODER mode
-//        leftLinearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        rightLinearSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void bottomPosition(){
-        double power = 0.4;
-        leftLinearSlide.setTargetPosition(0);
-        rightLinearSlide.setTargetPosition(0);
-
-        leftLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftLinearSlide.setPower(power);
-        rightLinearSlide.setPower(power);
-
-        while (leftLinearSlide.isBusy() && rightLinearSlide.isBusy()) {
-            // do some stuff here i guess
-        }
-
-        // Stop the motors after reaching the position
-        leftLinearSlide.setPower(0.1);
-        rightLinearSlide.setPower(0.1);
+        setPosition(0, 0.3);
     }
 
     public void topPosition(){
-        double power = 0.8;
-        leftLinearSlide.setTargetPosition(1550);
-        rightLinearSlide.setTargetPosition(1550);
-
-        leftLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftLinearSlide.setPower(power);
-        rightLinearSlide.setPower(power);
-
-        while (leftLinearSlide.isBusy() && rightLinearSlide.isBusy()) {
-            // do some stuff here i guess
-        }
-
-        // Stop the motors after reaching the position
-        leftLinearSlide.setPower(0.1);
-        rightLinearSlide.setPower(0.1);
+        setPosition(1550, 0.7);
     }
-    public void manualDrive(float left, float right){
-        leftLinearSlide.setPower(left);
-        rightLinearSlide.setPower((right));
-    }
+
     public int[] getPosition() {
         int[] pos = {leftLinearSlide.getCurrentPosition(),
                     rightLinearSlide.getCurrentPosition()};

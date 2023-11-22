@@ -55,6 +55,21 @@ public class GrabberArm {
 //        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public void setPosition(int pos, double power){
+
+        arm.setTargetPosition(arm.getCurrentPosition() + pos);
+
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        arm.setPower(power);
+
+        while (arm.isBusy()) {
+            // do some stuff here i guess
+        }
+
+        // Stop the motors after reaching the position
+        arm.setPower(0.1);
+    }
     public void drivePosition(){
         wrist.setPosition(0);
 
