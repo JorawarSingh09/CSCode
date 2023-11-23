@@ -168,7 +168,16 @@ public class JOmni extends LinearOpMode {
             }
 
             if(gamepad1.a){
-
+                linearSlides.bottomPosition();
+            }
+            if(gamepad1.b){
+                linearSlides.topPosition();
+            }
+            if(gamepad1.x){
+                grabberArm.topPosition();
+            }
+            if(gamepad1.y){
+                grabberArm.dropPosition();
             }
 
             drive(axial, lateral, yaw);
