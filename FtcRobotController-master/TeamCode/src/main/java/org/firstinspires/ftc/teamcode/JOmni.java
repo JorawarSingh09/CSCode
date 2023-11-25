@@ -148,7 +148,7 @@ public class JOmni extends LinearOpMode {
 
         grabberArm.setArmPosition(200);
         sleep(100);
-        grabberArm.setWristPosition(0);
+        grabberArm.setWristPosition(0.1);
         sleep(100);
         linearSlides.bottomPosition();
         sleep(200);

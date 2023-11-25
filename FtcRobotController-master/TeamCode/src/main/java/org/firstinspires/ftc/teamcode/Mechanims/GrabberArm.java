@@ -38,7 +38,7 @@ public class GrabberArm {
     }
 
     public void setWristPosition(double pos){
-        wrist.setPosition(pos);
+        wrist.setPosition(pos+0.5);
     }
 
     public void changeArmPosition(int pos){
