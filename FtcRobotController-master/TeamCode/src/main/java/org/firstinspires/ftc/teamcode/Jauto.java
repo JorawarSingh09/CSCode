@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,7 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Mechanims.GrabberArm;
+import org.firstinspires.ftc.teamcode.Mechanims.GrabberState;
 import org.firstinspires.ftc.teamcode.Mechanims.LinearSlides;
+import org.firstinspires.ftc.teamcode.Mechanims.MechanismState;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -40,7 +43,7 @@ import org.firstinspires.ftc.teamcode.Mechanims.LinearSlides;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Config
+//@Config
 @Autonomous(name = "Basic: Jauto", group = "Linear OpMode")
 public class Jauto extends LinearOpMode {
 
@@ -49,18 +52,32 @@ public class Jauto extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    private DcMotor leftLinearSlides = null;
-    private DcMotor rightLinearSlides = null;
-    private Servo claw = null;
     private LinearSlides linearSlides = null;
+    private GrabberArm grabberArm = null;
+    private MechanismState mechanismState = MechanismState.INIT;
 
-    private void drive(double lf, double rf, double lb, double rb){
+    private void setDrive(){
+        // Initialize the hardware variables. Note that the strings used here must
+        // correspond
+        // to the names assigned during the robot configuration step on the DS or RC
+        // devices.
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+    }
+    private double[] drive(double axial, double lateral, double yaw){
         double max;
-        // Set up a variable for each drive wheel to save the power level for telemetry.
-        double leftFrontPower = lf;
-        double rightFrontPower = rf;
-        double leftBackPower = lb;
-        double rightBackPower = rb;
+//        drivePosition();
+        double leftFrontPower = axial + lateral + yaw;
+        double rightFrontPower = axial - lateral - yaw;
+        double leftBackPower = axial - lateral + yaw;
+        double rightBackPower = axial + lateral - yaw;
 
         // Normalize the values so no wheel power exceeds 100%
         // This ensures that the robot maintains the desired motion.
@@ -79,9 +96,95 @@ public class Jauto extends LinearOpMode {
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
-        telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-        telemetry.addData("Back left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+        double[] drivePower = {leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
+        return drivePower;
     }
+    private void telemetry(){
+        // Show the elapsed game time and wheel power.
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+//            telemetry.addData("Front left/Right", "%4.2f, %4.2f", drivePower[0], drivePower[1]);
+//            telemetry.addData("Back left/Right", "%4.2f, %4.2f", drivePower[2], drivePower[3]);
+//            telemetry.addData("Trigger Values", "%d, %d", gamepad1.right_trigger, gamepad1.left_trigger);
+        telemetry.addData("Linear Slide Position left/right: ", "%d, %d",
+                linearSlides.getPosition()[0], linearSlides.getPosition()[1]);
+        telemetry.addData("Arm Position: ", "%d", grabberArm.getArm());
+        telemetry.addData("Wrist Position: ", "%4.2f", grabberArm.getWrist());
+        telemetry.addData("Claw Position: ", "%4.2f", grabberArm.getClaw());
+
+
+//        pk.put("Status", "Run Time: " + runtime.toString());
+
+
+//        dashboard.sendTelemetryPacket(pk);
+        telemetry.update();
+    }
+    private void startPosition(){
+        mechanismState = MechanismState.INIT;
+        //set Arm position to bottom
+        grabberArm.setArmPosition(0);
+        sleep(100);
+        // set Wrist to fold up
+        grabberArm.setWristPosition(1);
+        sleep(100);
+        //set Claw to open
+        grabberArm.closeClaw();
+        sleep(100);
+        // linear slides pos
+        linearSlides.bottomPosition();
+    }
+    private void drivePosition(){
+        if(mechanismState == MechanismState.PICKUP && grabberArm.getGrabberState() == GrabberState.CLOSED){
+            mechanismState = MechanismState.DRIVE;
+            grabberArm.setArmPosition(100);
+        }
+    }
+    private void pickupPosition(){
+        if(mechanismState == MechanismState.PICKUP) return;
+        mechanismState = MechanismState.PICKUP;
+
+        grabberArm.setArmPosition(200);
+        sleep(100);
+        grabberArm.setWristPosition(0);
+        sleep(100);
+        linearSlides.bottomPosition();
+        sleep(200);
+        grabberArm.setArmPosition(20);
+        sleep(100);
+        grabberArm.openClaw();
+    }
+    private void topPosition(){
+        if(mechanismState == MechanismState.TOP_POSITION) return;
+        mechanismState = MechanismState.TOP_POSITION;
+
+        grabberArm.setWristPosition(0);
+        sleep(100);
+        grabberArm.closeClaw();
+        sleep(100);
+        grabberArm.setArmPosition(520);
+        sleep(100);
+        linearSlides.topPosition();
+    }
+    private void dropPosition(){
+        if(mechanismState == MechanismState.DROP_POSITION) return;
+        mechanismState = MechanismState.DROP_POSITION;
+        grabberArm.setWristPosition(0.5);
+        sleep(100);
+        grabberArm.closeClaw();
+        sleep(100);
+        grabberArm.setArmPosition(835);
+        sleep(200);
+        linearSlides.topPosition();
+    }
+
+    // Strafe Left
+
+    // Strafe Right
+
+    // Forwards
+
+    // Backwards
+
+    //Turn Left
     @Override
     public void runOpMode() {
 

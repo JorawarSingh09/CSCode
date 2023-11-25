@@ -30,6 +30,11 @@ public class LinearSlides {
         rightLinearSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    /**
+    Change Position
+     INPUT: pos - change we want from current position
+     Move the linear slide up or down from current position
+     */
     public void changePosition(int pos){
         // do nothing if linear slides are already at the bottom
         if(leftLinearSlide.getCurrentPosition() < 20 && pos < 0){

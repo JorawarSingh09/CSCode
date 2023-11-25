@@ -210,6 +210,18 @@ public class JOmni extends LinearOpMode {
                 grabberArm.closeClaw();
             }
 
+            // Move linear slides down / up when ready to drop
+            if(gamepad1.left_bumper){
+                if(mechanismState == MechanismState.DROP_POSITION){
+                    linearSlides.changePosition(-50);
+                }
+            }
+
+            // Move linear slides up when ready to drop
+            if(gamepad1.right_bumper)
+                if(mechanismState== MechanismState.DROP_POSITION)
+                    linearSlides.changePosition(50);
+
             if(gamepad1.a){
                 pickupPosition();
             }
