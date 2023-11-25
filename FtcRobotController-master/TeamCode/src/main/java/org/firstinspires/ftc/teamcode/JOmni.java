@@ -202,36 +202,36 @@ public class JOmni extends LinearOpMode {
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
 
-            if(gamepad1.left_trigger > 0){
+            if(gamepad2.left_trigger > 0){
                 grabberArm.openClaw();
             }
 
-            if(gamepad1.right_trigger > 0){
+            if(gamepad2.right_trigger > 0){
                 grabberArm.closeClaw();
             }
 
             // Move linear slides down / up when ready to drop
-            if(gamepad1.left_bumper){
-                if(mechanismState == MechanismState.DROP_POSITION){
+            if(gamepad2.left_bumper){
+                if(mechanismState == MechanismState.DROP_POSITION || mechanismState == MechanismState.PICKUP){
                     linearSlides.changePosition(-50);
                 }
             }
 
             // Move linear slides up when ready to drop
-            if(gamepad1.right_bumper)
-                if(mechanismState== MechanismState.DROP_POSITION)
+            if(gamepad2.right_bumper)
+                if(mechanismState== MechanismState.DROP_POSITION || mechanismState == MechanismState.PICKUP)
                     linearSlides.changePosition(50);
 
-            if(gamepad1.a){
+            if(gamepad2.a){
                 pickupPosition();
             }
-            if(gamepad1.b){
+            if(gamepad2.b){
                 dropPosition();
             }
-            if (gamepad1.x) {
+            if (gamepad2.x) {
                 drivePosition();
             }
-            if(gamepad1.y){
+            if(gamepad2.y){
                 topPosition();
 //                grabberArm.moveWrist(0.5);
             }
