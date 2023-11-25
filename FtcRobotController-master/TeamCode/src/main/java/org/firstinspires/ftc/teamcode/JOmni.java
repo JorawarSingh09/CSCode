@@ -12,7 +12,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Mechanims.GrabberArm;
+import org.firstinspires.ftc.teamcode.Mechanims.GrabberState;
 import org.firstinspires.ftc.teamcode.Mechanims.LinearSlides;
+import org.firstinspires.ftc.teamcode.Mechanims.MechanismState;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -56,6 +58,7 @@ public class JOmni extends LinearOpMode {
     private DcMotor rightBackDrive = null;
     private LinearSlides linearSlides = null;
     private GrabberArm grabberArm = null;
+    private MechanismState mechanismState = MechanismState.INIT;
 
     private void setDrive(){
         // Initialize the hardware variables. Note that the strings used here must
@@ -72,10 +75,9 @@ public class JOmni extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
     }
-
     private double[] drive(double axial, double lateral, double yaw){
         double max;
-
+//        drivePosition();
         double leftFrontPower = axial + lateral + yaw;
         double rightFrontPower = axial - lateral - yaw;
         double leftBackPower = axial - lateral + yaw;
@@ -101,7 +103,6 @@ public class JOmni extends LinearOpMode {
         double[] drivePower = {leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
         return drivePower;
     }
-
     private void telemetry(){
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -121,28 +122,70 @@ public class JOmni extends LinearOpMode {
         dashboard.sendTelemetryPacket(pk);
         telemetry.update();
     }
-
-    /**
-     * LS MAX: 1500
-     *
-     * At top: arm 511, wrist 0
-     *
-     * at drop: arm 834, wrist 0.5
-     *
-     * at pickup: arm 0, wrist 0
-     *
-     * drive, arm 90
-     */
-    public void pickupPosition(){
-        grabberArm.pickupPosition();
+    private void startPosition(){
+        mechanismState = MechanismState.INIT;
+        //set Arm position to bottom
+        grabberArm.setArmPosition(0);
+        sleep(100);
+        // set Wrist to fold up
+        grabberArm.setWristPosition(1);
+        sleep(100);
+        //set Claw to open
+        grabberArm.closeClaw();
+        sleep(100);
+        // linear slides pos
         linearSlides.bottomPosition();
+    }
+    private void drivePosition(){
+        if(mechanismState == MechanismState.PICKUP && grabberArm.getGrabberState() == GrabberState.CLOSED){
+            mechanismState = MechanismState.DRIVE;
+            grabberArm.setArmPosition(100);
+        }
+    }
+    private void pickupPosition(){
+        if(mechanismState == MechanismState.PICKUP) return;
+        mechanismState = MechanismState.PICKUP;
+
+        grabberArm.setArmPosition(200);
+        sleep(100);
+        grabberArm.setWristPosition(0);
+        sleep(100);
+        linearSlides.bottomPosition();
+        sleep(200);
+        grabberArm.setArmPosition(20);
+        sleep(100);
+        grabberArm.openClaw();
+    }
+    private void topPosition(){
+        if(mechanismState == MechanismState.TOP_POSITION) return;
+        mechanismState = MechanismState.TOP_POSITION;
+
+        grabberArm.setWristPosition(0);
+        sleep(100);
+        grabberArm.closeClaw();
+        sleep(100);
+        grabberArm.setArmPosition(520);
+        sleep(100);
+        linearSlides.topPosition();
+    }
+    private void dropPosition(){
+        if(mechanismState == MechanismState.DROP_POSITION) return;
+        mechanismState = MechanismState.DROP_POSITION;
+        grabberArm.setWristPosition(0.5);
+        sleep(100);
+        grabberArm.closeClaw();
+        sleep(100);
+        grabberArm.setArmPosition(835);
+        sleep(200);
+        linearSlides.topPosition();
     }
     @Override
     public void runOpMode() {
-
         setDrive();
         linearSlides = new LinearSlides(hardwareMap);
         grabberArm = new GrabberArm(hardwareMap);
+
+        startPosition();
 
         telemetry.addData("Status", "Initialized");
         pk.put("Status", "Initialized");
@@ -159,25 +202,26 @@ public class JOmni extends LinearOpMode {
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
 
-            if(gamepad1.right_trigger > 0){
+            if(gamepad1.left_trigger > 0){
                 grabberArm.openClaw();
             }
 
-            if(gamepad1.left_trigger > 0){
+            if(gamepad1.right_trigger > 0){
                 grabberArm.closeClaw();
             }
 
             if(gamepad1.a){
-                linearSlides.bottomPosition();
+                pickupPosition();
             }
             if(gamepad1.b){
-                linearSlides.topPosition();
+                dropPosition();
             }
-            if(gamepad1.x){
-                grabberArm.topPosition();
+            if (gamepad1.x) {
+                drivePosition();
             }
             if(gamepad1.y){
-                grabberArm.dropPosition();
+                topPosition();
+//                grabberArm.moveWrist(0.5);
             }
 
             drive(axial, lateral, yaw);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Mechanims;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,6 +10,7 @@ public class GrabberArm {
     private Servo claw = null;
     private Servo wrist = null;
     private DcMotor arm = null;
+    private GrabberState grabberState = GrabberState.CLOSED;
 
     public GrabberArm(HardwareMap hm){
         claw = hm.get(Servo.class, "claw");
@@ -22,15 +24,21 @@ public class GrabberArm {
     }
 
     public void openClaw(){
-        claw.setPosition(0);
+        claw.setPosition(1);
+        grabberState = GrabberState.OPEN;
     }
 
     public void closeClaw(){
-        claw.setPosition(1);
+        claw.setPosition(0);
+        grabberState = GrabberState.CLOSED;
     }
 
-    public void moveWrist(double pos){
-        wrist.setPosition(wrist.getPosition() + pos);
+    public GrabberState getGrabberState(){
+        return grabberState;
+    }
+
+    public void setWristPosition(double pos){
+        wrist.setPosition(pos);
     }
 
     public void changeArmPosition(int pos){
@@ -55,12 +63,9 @@ public class GrabberArm {
 //        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void drivePosition(){
-        wrist.setPosition(0);
-
-        //how fast the arm moves
-        double power = 0.6;
-        arm.setTargetPosition(90);
+    public void setArmPosition(int pos){
+        double power = 0.4;
+        arm.setTargetPosition(pos);
 
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(power);
@@ -71,61 +76,6 @@ public class GrabberArm {
 
         // Stop the motors after reaching the position
         arm.setPower(0.1);
-    }
-    public void pickupPosition(){
-        wrist.setPosition(0);
-
-        //how fast the arm moves
-        double power = 0.6;
-        arm.setTargetPosition(0);
-
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(power);
-
-        while (arm.isBusy()) {
-            // do some stuff here i guess
-        }
-
-        // Stop the motors after reaching the position
-        arm.setPower(0.1);
-    }
-    public void topPosition(){
-       // At top: arm 511, wrist 0
-        wrist.setPosition(0);
-
-        //how fast the arm moves
-        double power = 0.6;
-        arm.setTargetPosition(511);
-
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(power);
-
-        while (arm.isBusy()) {
-            // do some stuff here i guess
-        }
-
-        // Stop the motors after reaching the position
-        arm.setPower(0.1);
-    }
-    public void dropPosition(){
-        // at drop: arm 834, wrist 0.5
-        wrist.setPosition(0.5);
-
-        //how fast the arm moves
-        double power = 0.6;
-        arm.setTargetPosition(835);
-
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        arm.setPower(power);
-
-        while (arm.isBusy()) {
-            // do some stuff here i guess
-        }
-
-        // Stop the motors after reaching the position
-        arm.setPower(0.1);
-
     }
     public int getArm(){
         return arm.getCurrentPosition();

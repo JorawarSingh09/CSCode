@@ -112,7 +112,7 @@ public class Jauto extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             if(canRun) {
-
+                //Put autonomous code here homies
                 canRun = false;
             }
             // Show the elapsed game time and wheel power.
