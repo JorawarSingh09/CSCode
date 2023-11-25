@@ -40,6 +40,13 @@ public class LinearSlides {
         if(leftLinearSlide.getCurrentPosition() < 20 && pos < 0){
             return;
         }
+
+
+        if(leftLinearSlide.getCurrentPosition() > 1500 && pos > 0){
+            return;
+        }
+        
+
         double power = 0.4;
         leftLinearSlide.setTargetPosition(leftLinearSlide.getCurrentPosition() + pos);
         rightLinearSlide.setTargetPosition(rightLinearSlide.getCurrentPosition() + pos);
