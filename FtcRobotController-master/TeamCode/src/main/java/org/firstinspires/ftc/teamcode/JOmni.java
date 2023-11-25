@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+//import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -44,13 +44,13 @@ import org.firstinspires.ftc.teamcode.Mechanims.MechanismState;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Config
+//@Config
 @TeleOp(name = "Basic: Jomni", group = "Linear OpMode")
 public class JOmni extends LinearOpMode {
 
     //Remove before Comp
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-    TelemetryPacket pk = new TelemetryPacket();
+//    FtcDashboard dashboard = FtcDashboard.getInstance();
+//    TelemetryPacket pk = new TelemetryPacket();
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -116,10 +116,10 @@ public class JOmni extends LinearOpMode {
         telemetry.addData("Claw Position: ", "%4.2f", grabberArm.getClaw());
 
 
-        pk.put("Status", "Run Time: " + runtime.toString());
+//        pk.put("Status", "Run Time: " + runtime.toString());
 
 
-        dashboard.sendTelemetryPacket(pk);
+//        dashboard.sendTelemetryPacket(pk);
         telemetry.update();
     }
     private void startPosition(){
@@ -188,7 +188,7 @@ public class JOmni extends LinearOpMode {
         startPosition();
 
         telemetry.addData("Status", "Initialized");
-        pk.put("Status", "Initialized");
+//        pk.put("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
