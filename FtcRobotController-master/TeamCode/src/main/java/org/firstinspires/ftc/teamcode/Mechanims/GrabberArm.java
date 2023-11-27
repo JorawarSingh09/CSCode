@@ -24,7 +24,7 @@ public class GrabberArm {
     }
 
     public void openClaw(){
-        claw.setPosition(1);
+        claw.setPosition(0.6);
         grabberState = GrabberState.OPEN;
     }
 

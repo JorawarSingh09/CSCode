@@ -71,6 +71,14 @@ public class Jauto extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
     }
+
+    /**
+     *
+     * @param axial: Left Stick Up/Down, Controls forwards and reverese
+     * @param lateral: Left Stick L/R, controls strafe
+     * @param yaw: Right Stick L/R, Controls on the spot turning
+     * @return
+     */
     private double[] drive(double axial, double lateral, double yaw){
         double max;
 //        drivePosition();
@@ -175,16 +183,55 @@ public class Jauto extends LinearOpMode {
         sleep(200);
         linearSlides.topPosition();
     }
-
-    // Strafe Left
-
-    // Strafe Right
-
     // Forwards
+    public void driveForward(int milliseconds){
+        drive(1, 0 ,0);
+        sleep(milliseconds);
+        drive(0, 0, 0);
+        sleep(200);
+    }
 
     // Backwards
+    public void driveBack(int milliseconds){
+        drive(-1, 0, 0);
+        sleep(milliseconds);
+        drive(0, 0, 0);
+        sleep(200);
+    }
 
     //Turn Left
+    public void turnLeft(int milliseconds){
+        drive(0, 0, 1);
+        sleep(milliseconds);
+        drive(0, 0, 0);
+        sleep(200);
+    }
+
+    // Turn Right
+    public void turnRight(int milliseconds){
+        drive(0, 0, -1);
+        sleep(milliseconds);
+        drive(0, 0, 0);
+        sleep(200);
+    }
+
+    // Strafe Left
+    public void strafeLeft(int milliseconds){
+        drive(0, -1, 0);
+        sleep(milliseconds);
+        drive(0, 0, 0);
+        sleep(200);
+    }
+
+    // Strafe Right
+    public void strafeRight(int milliseconds){
+        drive(0, 1, 0);
+        sleep(milliseconds);
+        drive(0, 0, 0);
+        sleep(200);
+    }
+
+
     @Override
     public void runOpMode() {
 
@@ -211,11 +258,22 @@ public class Jauto extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
+        startPosition();
         boolean canRun = true;
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             if(canRun) {
                 //Put autonomous code here homies
+                strafeLeft(75);
+                driveBack(4000);
+                strafeLeft(1000);
+//                topPosition();
+//                dropPosition();
+//                grabberArm.openClaw();
+//                grabberArm.closeClaw();
+
+
+
                 canRun = false;
             }
             // Show the elapsed game time and wheel power.

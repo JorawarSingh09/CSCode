@@ -60,6 +60,13 @@ public class JOmni extends LinearOpMode {
     private GrabberArm grabberArm = null;
     private MechanismState mechanismState = MechanismState.INIT;
 
+    private final double LOW_SPEED = 0.3;
+    private final double MEDIUM_SPEED = 0.6;
+    private final double HIGH_SPEED = 1.0;
+
+    // Current speed limit
+    private double currentSpeedLimit = HIGH_SPEED;
+
     private void setDrive(){
         // Initialize the hardware variables. Note that the strings used here must
         // correspond
@@ -96,10 +103,10 @@ public class JOmni extends LinearOpMode {
             rightBackPower /= max;
         }
 
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
+        leftFrontDrive.setPower(leftFrontPower * currentSpeedLimit);
+        rightFrontDrive.setPower(rightFrontPower * currentSpeedLimit);
+        leftBackDrive.setPower(leftBackPower * currentSpeedLimit);
+        rightBackDrive.setPower(rightBackPower * currentSpeedLimit);
         double[] drivePower = {leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
         return drivePower;
     }
@@ -201,7 +208,15 @@ public class JOmni extends LinearOpMode {
             double axial = -gamepad1.left_stick_y; // Note: pushing stick forward gives negative value
             double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x;
-
+            if(gamepad1.a){
+                currentSpeedLimit = HIGH_SPEED;
+            }
+            if(gamepad1.y){
+                currentSpeedLimit = MEDIUM_SPEED;
+            }
+            if(gamepad1.b){
+                currentSpeedLimit = LOW_SPEED;
+            }
             if(gamepad2.left_trigger > 0){
                 grabberArm.openClaw();
             }
