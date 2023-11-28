@@ -238,6 +238,18 @@ public class JOmni extends LinearOpMode {
                 topPosition();
 //                grabberArm.moveWrist(0.5);
             }
+            if(gamepad1.dpad_up){
+                linearSlides.climb(0.4);
+            }
+            if(gamepad1.dpad_up){
+                linearSlides.climb(0.6);
+            }
+            if(gamepad1.dpad_up){
+                linearSlides.climb(0.8);
+            }
+            if(gamepad1.dpad_up){
+                linearSlides.climb(1);
+            }
 
             drive(axial, lateral, yaw);
             telemetry();
