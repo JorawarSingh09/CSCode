@@ -38,14 +38,14 @@ public class GrabberArm {
     }
 
     public void setWristPosition(double pos){
-        wrist.setPosition(pos+0.5);
+        wrist.setPosition(pos + 0.36);
     }
 
     public void changeArmPosition(int pos){
         //if arm is at bottom dont move
         if(pos < 0 && arm.getCurrentPosition() < 0) return;
 
-        double power = 0.6;
+        double power = 0.3;
         arm.setTargetPosition(arm.getCurrentPosition() + pos);
 
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -64,7 +64,7 @@ public class GrabberArm {
     }
 
     public void setArmPosition(int pos){
-        double power = 0.4;
+        double power = 0.3;
         arm.setTargetPosition(pos);
 
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);

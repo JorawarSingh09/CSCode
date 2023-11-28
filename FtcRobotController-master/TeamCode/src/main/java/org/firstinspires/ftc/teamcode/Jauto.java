@@ -99,6 +99,10 @@ public class Jauto extends LinearOpMode {
         double[] drivePower = {leftFrontPower, rightFrontPower, leftBackPower, rightBackPower};
         return drivePower;
     }
+
+    private void stopDrive(){
+        drive(0,0,0);
+    }
     private void telemetry(){
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -133,26 +137,29 @@ public class Jauto extends LinearOpMode {
         linearSlides.bottomPosition();
     }
     private void drivePosition(){
+        stopDrive();
         if(mechanismState == MechanismState.PICKUP && grabberArm.getGrabberState() == GrabberState.CLOSED){
             mechanismState = MechanismState.DRIVE;
             grabberArm.setArmPosition(100);
         }
     }
     private void pickupPosition(){
+        stopDrive();
         if(mechanismState == MechanismState.PICKUP) return;
         mechanismState = MechanismState.PICKUP;
 
         grabberArm.setArmPosition(200);
         sleep(100);
-        grabberArm.setWristPosition(0);
-        sleep(100);
         linearSlides.bottomPosition();
         sleep(200);
         grabberArm.setArmPosition(20);
         sleep(100);
+        grabberArm.setWristPosition(0);
+        sleep(100);
         grabberArm.openClaw();
     }
     private void topPosition(){
+        stopDrive();
         if(mechanismState == MechanismState.TOP_POSITION) return;
         mechanismState = MechanismState.TOP_POSITION;
 
@@ -165,6 +172,7 @@ public class Jauto extends LinearOpMode {
         linearSlides.topPosition();
     }
     private void dropPosition(){
+        stopDrive();
         if(mechanismState == MechanismState.DROP_POSITION) return;
         mechanismState = MechanismState.DROP_POSITION;
         grabberArm.setWristPosition(0.5);
@@ -192,21 +200,11 @@ public class Jauto extends LinearOpMode {
         // correspond
         // to the names assigned during the robot configuration step on the DS or RC
         // devices.
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "left_front_drive");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
-
+        setDrive();
         linearSlides = new LinearSlides(hardwareMap);
-
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-
-
-
+        grabberArm = new GrabberArm(hardwareMap);
         telemetry.addData("Status", "Initialized");
+//        pk.put("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
@@ -216,7 +214,15 @@ public class Jauto extends LinearOpMode {
         while (opModeIsActive()) {
             if(canRun) {
                 //Put autonomous code here homies
-                canRun = false;
+                grabberArm.openClaw();
+//                sleep(3000);
+//                grabberArm.setWristPosition(0.3);
+//                sleep(3000);
+//                grabberArm.setWristPosition(0.6);
+//                sleep(3000);
+//                grabberArm.setWristPosition(1);
+//                sleep(1000);
+//                canRun = false;
             }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
