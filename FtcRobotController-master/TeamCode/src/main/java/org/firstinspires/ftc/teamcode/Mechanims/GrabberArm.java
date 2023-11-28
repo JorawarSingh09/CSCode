@@ -12,10 +12,12 @@ public class GrabberArm {
     private DcMotor arm = null;
     private GrabberState grabberState = GrabberState.CLOSED;
 
-    private double Kp = 0.2; // Proportional coefficient
-    private double Ki = 0; // Integral coefficient
-    private double Kd = 0; // Derivative coefficient
-    private double Kf = 0;
+    private double Ku = 0.1;
+    private double Tu = 0.2;
+    private double Kp = 0.2 * Ku; // Proportional coefficient
+    private double Ki = 0.4 * Ku / Tu; // Integral coefficient
+    private double Kd = 0.066 * Ku * Tu; // Derivative coefficient
+    private double Kf = 1;
 
     private double integral, previous_error;
 
