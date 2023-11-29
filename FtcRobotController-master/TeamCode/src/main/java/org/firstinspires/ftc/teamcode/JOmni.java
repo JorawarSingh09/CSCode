@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -58,6 +59,7 @@ public class JOmni extends LinearOpMode {
     private DcMotor rightBackDrive = null;
     private LinearSlides linearSlides = null;
     private GrabberArm grabberArm = null;
+    private Servo planeLauncher = null;
     private MechanismState mechanismState = MechanismState.INIT;
 
     private void setDrive(){
@@ -69,6 +71,11 @@ public class JOmni extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "left_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
+
+        planeLauncher = hardwareMap.get(Servo.class, "plane_launcher");
+//        planeLauncher.setDirection(DcMotorSimple.Direction.REVERSE);
+        planeLauncher.setPosition(0);
+
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -241,14 +248,18 @@ public class JOmni extends LinearOpMode {
             if(gamepad1.dpad_up){
                 linearSlides.climb(0.4);
             }
-            if(gamepad1.dpad_up){
+            if(gamepad1.dpad_right){
                 linearSlides.climb(0.6);
             }
-            if(gamepad1.dpad_up){
+            if(gamepad1.dpad_down){
                 linearSlides.climb(0.8);
             }
-            if(gamepad1.dpad_up){
+            if(gamepad1.dpad_left){
                 linearSlides.climb(1);
+            }
+            if(gamepad1.left_stick_button){
+//
+                planeLauncher.setPosition(1);
             }
 
             drive(axial, lateral, yaw);

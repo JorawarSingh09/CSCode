@@ -111,8 +111,8 @@ public class LinearSlides {
     }
 
     public void climb(double power){
-        leftLinearSlide.setTargetPosition(0);
-        rightLinearSlide.setTargetPosition(0);
+        leftLinearSlide.setTargetPosition(300);
+        rightLinearSlide.setTargetPosition(300);
 
         leftLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
