@@ -72,10 +72,16 @@ public class GrabberArm {
 
         while (arm.isBusy()) {
             // do some stuff here i guess
+            if(arm.getCurrentPosition() > 0.8 * pos || arm.getCurrentPosition() < 0.2 * pos){
+                arm.setPower(0.1);
+            }
+            else{
+                arm.setPower(0.3);
+            }
         }
 
         // Stop the motors after reaching the position
-                arm.setPower(0.03);
+                arm.setPower(0);
     }
     public int getArm(){
         return arm.getCurrentPosition();

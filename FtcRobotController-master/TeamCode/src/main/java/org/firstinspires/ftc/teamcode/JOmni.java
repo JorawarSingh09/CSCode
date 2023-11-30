@@ -6,7 +6,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -46,7 +45,7 @@ import org.firstinspires.ftc.teamcode.Mechanims.MechanismState;
  */
 
 //@Config
-@TeleOp(name = "Basic: Jomni", group = "Linear OpMode")
+@TeleOp(name = "Basic: JOmni", group = "Linear OpMode")
 public class JOmni extends LinearOpMode {
 
     //Remove before Comp
@@ -75,6 +74,7 @@ public class JOmni extends LinearOpMode {
         planeLauncher = hardwareMap.get(Servo.class, "plane_launcher");
 //        planeLauncher.setDirection(DcMotorSimple.Direction.REVERSE);
         planeLauncher.setPosition(0);
+
 
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -121,6 +121,7 @@ public class JOmni extends LinearOpMode {
         telemetry.addData("Arm Position: ", "%d", grabberArm.getArm());
         telemetry.addData("Wrist Position: ", "%4.2f", grabberArm.getWrist());
         telemetry.addData("Claw Position: ", "%4.2f", grabberArm.getClaw());
+
 
 
 //        pk.put("Status", "Run Time: " + runtime.toString());
