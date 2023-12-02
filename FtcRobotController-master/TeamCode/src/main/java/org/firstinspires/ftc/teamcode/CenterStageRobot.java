@@ -241,7 +241,7 @@ public class CenterStageRobot {
     public void dropPosition(){
         if(mechanismState == MechanismState.DROP_POSITION) return;
         mechanismState = MechanismState.DROP_POSITION;
-        grabberArm.setWristPosition(0.4);
+        grabberArm.setWristPosition(0.3);
 
         grabberArm.closeClaw();
 
