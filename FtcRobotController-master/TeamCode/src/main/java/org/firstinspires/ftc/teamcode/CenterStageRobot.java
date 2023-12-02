@@ -136,42 +136,42 @@ public class CenterStageRobot {
     /**
      * Drive forwards for targetSeconds
      */
-    public void driveForward(int targetSeconds){
+    public void driveForward(){
         drive(1, 0 ,0);
     }
 
     /**
      * Drive backwards for targetSeconds
      */
-    public void driveBack(int targetSeconds){
+    public void driveBack(){
         drive(-1, 0, 0);
     }
 
     /**
      * Rotate left for targetSeconds
      */
-    public void turnLeft(int targetSeconds){
+    public void turnLeft(){
         drive(0, 0, 1);
     }
 
     /**
      * rotate right for targetSeconds
      */
-    public void turnRight(int targetSeconds){
+    public void turnRight(){
         drive(0, 0, -1);
     }
 
     /**
      * Strafe left for targetSeconds
      */
-    public void strafeLeft(int targetSeconds){
+    public void strafeLeft(){
         drive(0, -1, 0);
     }
 
     /**
      * Strafe right for targetSeconds
      */
-    public void strafeRight(int targetSeconds){
+    public void strafeRight(){
         drive(0, 1, 0);
     }
 
@@ -254,7 +254,7 @@ public class CenterStageRobot {
      * Raise arms and put them in position for climb
      */
     public void raiseHooks(){
-        linearSlides.climbPosition();
+        linearSlides.climbPosition() ;
     }
 
     /**
