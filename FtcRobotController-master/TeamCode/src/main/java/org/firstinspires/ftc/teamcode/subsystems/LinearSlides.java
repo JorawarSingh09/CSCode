@@ -94,6 +94,10 @@ public class LinearSlides {
         setPosition(1550);
     }
 
+    public void climbPosition(){
+        setPosition(1240);
+    }
+
     public void climb(double power){
         leftLinearSlide.setTargetPosition(300);
         rightLinearSlide.setTargetPosition(300);
