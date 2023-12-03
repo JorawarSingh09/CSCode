@@ -216,15 +216,6 @@ public class Jauto extends LinearOpMode {
         while (opModeIsActive()) {
             if(canRun) {
                 //Put autonomous code here homies
-                grabberArm.openClaw();
-//                sleep(3000);
-//                grabberArm.setWristPosition(0.3);
-//                sleep(3000);
-//                grabberArm.setWristPosition(0.6);
-//                sleep(3000);
-//                grabberArm.setWristPosition(1);
-//                sleep(1000);
-//                canRun = false;
             }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
