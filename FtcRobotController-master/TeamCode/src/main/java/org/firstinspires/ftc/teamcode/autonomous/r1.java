@@ -24,6 +24,9 @@ public class r1 extends LinearOpMode {
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
+<<<<<<< HEAD
+            
+=======
 //            myRobot.pickupPosition();
 //            sleep(2000);
 //            myRobot.closeClaw();
@@ -36,8 +39,9 @@ public class r1 extends LinearOpMode {
 //            myRobot.driveStop();
 
 
+>>>>>>> bdd3052fa095f790d82612801a3a9cc73fee84e2
             //start code here
-            sleep(50000);
+
         }
     }
 }
