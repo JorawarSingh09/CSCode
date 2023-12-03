@@ -25,7 +25,7 @@ public class b2 extends LinearOpMode {
 
         while(opModeIsActive() && canRun){
             myRobot.strafeLeft();
-            sleep(2000);
+            sleep(2500);
             myRobot.driveBack();
             sleep(3000);
             myRobot.driveStop();
