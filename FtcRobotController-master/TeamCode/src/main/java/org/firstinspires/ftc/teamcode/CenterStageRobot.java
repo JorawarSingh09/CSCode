@@ -178,7 +178,7 @@ public class CenterStageRobot {
      * Strafe left for targetSeconds
      */
     public void strafeLeft(){
-        drive(-0.14, -0.5, 0);
+        drive(0, -0.5, 0.021);
     }
 
     /**
