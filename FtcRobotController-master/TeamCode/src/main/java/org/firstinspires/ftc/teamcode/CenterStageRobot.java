@@ -6,10 +6,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.GrabberArm;
 import org.firstinspires.ftc.teamcode.subsystems.GrabberState;
 import org.firstinspires.ftc.teamcode.subsystems.LinearSlides;
 import org.firstinspires.ftc.teamcode.subsystems.MechanismState;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 public class CenterStageRobot {
     //contains all the code for interacting with the robots functions
@@ -25,6 +27,9 @@ public class CenterStageRobot {
     private MechanismState mechanismState = MechanismState.INIT;
     private HardwareMap hardwareMap;
     private Telemetry telemetry;
+
+    private WebcamName camera;
+    private VisionPortal visionPortal;
 
     private final double LOW_SPEED = 0.3;
     private final double MEDIUM_SPEED = 0.6;
@@ -82,6 +87,12 @@ public class CenterStageRobot {
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
     /**
@@ -167,14 +178,14 @@ public class CenterStageRobot {
      * Strafe left for targetSeconds
      */
     public void strafeLeft(){
-        drive(0, -1, 0);
+        drive(-0.13, -0.5, 0);
     }
 
     /**
      * Strafe right for targetSeconds
      */
     public void strafeRight(){
-        drive(0, 1, 0);
+        drive(0.13, 0.5, 0);
     }
 
     /**
