@@ -88,5 +88,6 @@ public class CompetitionTeleop extends LinearOpMode {
                 myRobot.dropPosition();
             }
         }
+        myRobot.reset();
     }
 }

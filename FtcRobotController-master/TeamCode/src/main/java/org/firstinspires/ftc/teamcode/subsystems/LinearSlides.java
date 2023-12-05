@@ -116,6 +116,25 @@ public class LinearSlides {
         leftLinearSlide.setPower(0.1);
         rightLinearSlide.setPower(0.1);
     }
+
+    public void reset(){
+        leftLinearSlide.setTargetPosition(1400);
+        rightLinearSlide.setTargetPosition(1400);
+
+        leftLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightLinearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftLinearSlide.setPower(0.4);
+        rightLinearSlide.setPower(0.4);
+
+        while (leftLinearSlide.isBusy() && rightLinearSlide.isBusy()) {
+            // do some stuff here i guess
+        }
+
+        // Stop the motors after reaching the position
+        leftLinearSlide.setPower(0.1);
+        rightLinearSlide.setPower(0.1);
+    }
     public void manualDrive(boolean up){
         double power =  0.1;
         if(!up) power = - 0.1;

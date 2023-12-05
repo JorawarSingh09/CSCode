@@ -93,7 +93,9 @@ public class CenterStageRobot {
      */
     public double[] drive(double axial, double lateral, double yaw){
         double max;
-//        drivePosition();
+//        if(grabberArm.getGrabberState() == GrabberState.CLOSED && mechanismState == MechanismState.PICKUP){
+//            drivePosition();
+//        }
         double leftFrontPower = axial + lateral + yaw;
         double rightFrontPower = axial - lateral - yaw;
         double leftBackPower = axial - lateral + yaw;
@@ -205,8 +207,7 @@ public class CenterStageRobot {
         driveStop();
         if(mechanismState == MechanismState.PICKUP && grabberArm.getGrabberState() == GrabberState.CLOSED){
             mechanismState = MechanismState.DRIVE;
-            grabberArm.setArmPosition(100);
-            grabberArm.setWristPosition(0.3);
+            grabberArm.setWristPosition(1);
         }
     }
 
@@ -269,6 +270,15 @@ public class CenterStageRobot {
     public void climb(){
         driveStop();
         linearSlides.climb(1);
+    }
+
+    /**
+     * Lower the robot after climb
+     *
+     */
+
+    public void reset(){
+        linearSlides.reset();
     }
 
     /**
