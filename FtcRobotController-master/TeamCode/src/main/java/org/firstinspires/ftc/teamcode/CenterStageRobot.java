@@ -136,42 +136,42 @@ public class CenterStageRobot {
     /**
      * Drive forwards for targetSeconds
      */
-    public void driveForward(int targetSeconds){
+    public void driveForward(){
         drive(1, 0 ,0);
     }
 
     /**
      * Drive backwards for targetSeconds
      */
-    public void driveBack(int targetSeconds){
+    public void driveBack(){
         drive(-1, 0, 0);
     }
 
     /**
      * Rotate left for targetSeconds
      */
-    public void turnLeft(int targetSeconds){
+    public void turnRight(){
         drive(0, 0, 1);
     }
 
     /**
      * rotate right for targetSeconds
      */
-    public void turnRight(int targetSeconds){
+    public void turnLeft(){
         drive(0, 0, -1);
     }
 
     /**
      * Strafe left for targetSeconds
      */
-    public void strafeLeft(int targetSeconds){
+    public void strafeLeft(){
         drive(0, -1, 0);
     }
 
     /**
      * Strafe right for targetSeconds
      */
-    public void strafeRight(int targetSeconds){
+    public void strafeRight(){
         drive(0, 1, 0);
     }
 
@@ -186,6 +186,7 @@ public class CenterStageRobot {
      * position of robot before game has begun
      */
     public void startPosition(){
+        driveStop();
         mechanismState = MechanismState.INIT;
         //set Arm position to bottom
         grabberArm.setArmPosition(0);
@@ -201,6 +202,7 @@ public class CenterStageRobot {
      * Mechanism position when drive,
      */
     public void drivePosition(){
+        driveStop();
         if(mechanismState == MechanismState.PICKUP && grabberArm.getGrabberState() == GrabberState.CLOSED){
             mechanismState = MechanismState.DRIVE;
             grabberArm.setArmPosition(100);
@@ -212,6 +214,7 @@ public class CenterStageRobot {
      * mechanism position when you need to pickup the pixel
      */
     public void pickupPosition(){
+        driveStop();
         if(mechanismState == MechanismState.PICKUP) return;
         mechanismState = MechanismState.PICKUP;
 
@@ -226,6 +229,7 @@ public class CenterStageRobot {
      * Mechanism position between drop and pickup
      */
     public void topPosition(){
+        driveStop();
         if(mechanismState == MechanismState.TOP_POSITION) return;
         mechanismState = MechanismState.TOP_POSITION;
 
@@ -239,13 +243,14 @@ public class CenterStageRobot {
      * mechanism position for dropping pixel
      */
     public void dropPosition(){
+        driveStop();
         if(mechanismState == MechanismState.DROP_POSITION) return;
         mechanismState = MechanismState.DROP_POSITION;
-        grabberArm.setWristPosition(0.4);
+        grabberArm.setWristPosition(0.25);
 
         grabberArm.closeClaw();
 
-        grabberArm.setArmPosition(835);
+        grabberArm.setArmPosition(810);
 
         linearSlides.topPosition();
     }
@@ -254,13 +259,15 @@ public class CenterStageRobot {
      * Raise arms and put them in position for climb
      */
     public void raiseHooks(){
-        linearSlides.climbPosition();
+        driveStop();
+        linearSlides.climbPosition() ;
     }
 
     /**
      * lower climb so that robot climbs up
      */
     public void climb(){
+        driveStop();
         linearSlides.climb(1);
     }
 
@@ -268,6 +275,7 @@ public class CenterStageRobot {
      * for adjusting linear slide pickup and drop off
      */
     public void adjustSlides(int pos){
+        driveStop();
         linearSlides.changePosition(pos);
     }
 
@@ -275,6 +283,7 @@ public class CenterStageRobot {
      * launch plane
      */
     public void launchPlane(){
+        driveStop();
         planeLauncher.setPosition(1);
     }
 
@@ -282,6 +291,7 @@ public class CenterStageRobot {
      * Reset plane launcher
      */
     public void resetLauncher(){
+        driveStop();
         planeLauncher.setPosition(0);
     }
 
@@ -289,6 +299,7 @@ public class CenterStageRobot {
      * open claw
      */
     public void openClaw(){
+        driveStop();
         grabberArm.openClaw();
     }
 
@@ -296,6 +307,7 @@ public class CenterStageRobot {
      * close claw
      */
     public void closeClaw(){
+        driveStop();
         grabberArm.closeClaw();
     }
 }

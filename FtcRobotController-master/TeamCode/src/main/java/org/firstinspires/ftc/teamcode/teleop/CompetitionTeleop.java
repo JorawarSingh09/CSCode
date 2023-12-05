@@ -62,11 +62,11 @@ public class CompetitionTeleop extends LinearOpMode {
 
             // Adjusting linear slides up
             if(operator.right_bumper){
-                myRobot.adjustSlides(10);
+                myRobot.adjustSlides(30);
             }
 
-            if(operator.right_bumper){
-                myRobot.adjustSlides(-10);
+            if(operator.left_bumper){
+                myRobot.adjustSlides(-30);
             }
 
             // Pickup Position
