@@ -24,29 +24,31 @@ public class r1 extends LinearOpMode {
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
-            myRobot.strafeRight();
-            sleep(2300);
+            myRobot.drivePosition();
+            myRobot.driveForward();
+            sleep(1500);
+            myRobot.driveStop();
+            myRobot.dropPosition();
+            myRobot.openClaw();
+            myRobot.drivePosition();
+            myRobot.closeClaw();
             myRobot.driveBack();
-            sleep(3000);
+            sleep(1500);
+            myRobot.driveStop();
+            myRobot.turnRight();
+            sleep(450);
+            myRobot.driveStop();
+            myRobot.driveForward();
+            sleep(4500);
+            myRobot.driveStop();
+            myRobot.strafeLeft();
+            sleep(4000);
+            myRobot.driveStop();
+            myRobot.driveForward();
+            sleep(1500);
             myRobot.driveStop();
 
-            
-
-//            myRobot.pickupPosition();
-//            sleep(2000);
-//            myRobot.closeClaw();
-//            sleep(2000);
-//            myRobot.topPosition()
-
-            // example code Follow me
-//            myRobot.driveForward();
-//            sleep(1000);
-//            myRobot.driveStop();
-
-
-//>>>>>>> bdd3052fa095f790d82612801a3a9cc73fee84e2
-            //start code here
-
+            canRun = false; // make sure loop doesn't run again
         }
     }
 }
