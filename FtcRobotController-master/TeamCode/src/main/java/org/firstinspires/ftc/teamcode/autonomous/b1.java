@@ -25,12 +25,20 @@ public class b1 extends LinearOpMode {
 
         while(opModeIsActive() && canRun){
             myRobot.driveForward();
-            sleep(1500);
+            sleep(1800);
             myRobot.driveStop();
             myRobot.pickupPosition();
             sleep(500);
             myRobot.driveBack();
-            sleep(1400);
+            sleep(200);
+            myRobot.driveStop();
+            myRobot.closeClaw();
+            myRobot.drivePosition();
+            myRobot.driveBack();
+            sleep(1000);
+            myRobot.driveStop();
+            myRobot.strafeLeft();
+            sleep(5000);
             myRobot.driveStop();
 
 
