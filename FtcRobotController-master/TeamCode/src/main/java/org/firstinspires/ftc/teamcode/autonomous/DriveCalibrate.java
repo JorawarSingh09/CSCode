@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
-@Autonomous(name = "calibrate", group = "Linear OpMode")
+@Autonomous(name = "Use to calibrate Strafe", group = "Linear OpMode")
 public class DriveCalibrate extends LinearOpMode {
     CenterStageRobot myRobot;
     Gamepad driver;

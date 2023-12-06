@@ -6,25 +6,28 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
-@TeleOp(name = "Basic: CompTeleOp", group = "Linear OpMode")
+@TeleOp(name = "Tele: CompetitionCode", group = "Linear OpMode")
 public class CompetitionTeleop extends LinearOpMode {
-    FtcDashboard dashboard = FtcDashboard.getInstance();
+    private ElapsedTime runtime = new ElapsedTime();
+    FtcDashboard dashboard;
     CenterStageRobot myRobot;
     Gamepad driver;
     Gamepad operator;
     @Override
     public void runOpMode() throws InterruptedException {
         myRobot = new CenterStageRobot(hardwareMap, telemetry);
+        dashboard = FtcDashboard.getInstance();
 
         myRobot.startPosition();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
-
+        runtime.reset();
         while (opModeIsActive()) {
             driver = gamepad1;
             operator = gamepad2;
@@ -44,7 +47,7 @@ public class CompetitionTeleop extends LinearOpMode {
                 myRobot.climb();
             }
             // launch plane and reset the servo
-            if(driver.a){
+            if(driver.y && runtime.seconds() > 60){
                 myRobot.launchPlane();
                 sleep(1000);
                 myRobot.resetLauncher();
@@ -87,7 +90,12 @@ public class CompetitionTeleop extends LinearOpMode {
             if (operator.b) {
                 myRobot.dropPosition();
             }
+
+            if(runtime.seconds() > 90){
+                myRobot.reset();
+                myRobot.driveStop();
+                break;
+            }
         }
-        myRobot.reset();
     }
 }

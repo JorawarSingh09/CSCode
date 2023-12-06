@@ -128,7 +128,7 @@ public class CenterStageRobot {
         // check state of mechanism and set speed limit
         switch (mechanismState) {
             case PICKUP:
-                currentSpeedLimit = MEDIUM_SPEED;
+                currentSpeedLimit = LOW_SPEED;
             case TOP_POSITION:
                 currentSpeedLimit = LOW_SPEED;
             case DROP_POSITION:
@@ -200,15 +200,12 @@ public class CenterStageRobot {
      */
     public void startPosition(){
         driveStop();
+        grabberArm.closeClaw();
         mechanismState = MechanismState.INIT;
         //set Arm position to bottom
-        grabberArm.setArmPosition(0);
+        grabberArm.setArmPosition(280);
         // set Wrist to fold up
         grabberArm.setWristPosition(1);
-        //set Claw to open
-        grabberArm.closeClaw();
-        // linear slides pos
-        linearSlides.bottomPosition();
     }
 
     /**
@@ -231,6 +228,7 @@ public class CenterStageRobot {
         mechanismState = MechanismState.PICKUP;
 
         grabberArm.setArmPosition(200);
+        grabberArm.manualPower();
         grabberArm.setWristPosition(0);
         linearSlides.bottomPosition();
         grabberArm.setArmPosition(20);

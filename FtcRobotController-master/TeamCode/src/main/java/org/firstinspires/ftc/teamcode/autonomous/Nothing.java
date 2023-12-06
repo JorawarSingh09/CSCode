@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
-@Autonomous(name = "Nothing", group = "Linear OpMode")
+@Autonomous(name = "This does nothing", group = "Linear OpMode")
 public class Nothing extends LinearOpMode {
     CenterStageRobot myRobot;
     Gamepad driver;

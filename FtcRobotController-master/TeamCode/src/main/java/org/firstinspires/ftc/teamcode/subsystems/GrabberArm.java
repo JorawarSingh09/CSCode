@@ -78,9 +78,10 @@ public class GrabberArm {
                 arm.setPower(0.3);
             }
         }
+    }
 
-        // Stop the motors after reaching the position
-                arm.setPower(0);
+    public void manualPower(){
+        arm.setPower(0.05);
     }
     public int getArm(){
         return arm.getCurrentPosition();
