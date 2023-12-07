@@ -48,36 +48,66 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
 
             Recognition foundProp = getBestFit();
             if(foundProp == null){
-                //run default auto
+//                run default auto
 //                defaultDropAndPark();
                 telemetry.addData("I FOUND NOTHING", "try another position");
             }
             else{
-                //seek prop
+//                seek prop
                 double xLoc = (foundProp.getLeft() + foundProp.getRight()) / 2 ;
                 telemetry.addData("current Location of Prop: ", xLoc);
-                //if the prop is on the center it will print the value
-                // calibratedCenter +- error
+//                if the prop is on the center it will print the value
+//                 calibratedCenter +- error
                 if(xLoc < calibratedCenter - measuredVisionError){
-                    // TODO make sure this is left of robot
-                    // run code
+//                     TODO make sure this is left of robot
+//                     run code
+
+                    myRobot.driveForward();
+                    sleep(1300);
+                    myRobot.turnLeft();
+                    sleep(800);
+                    myRobot.driveForward();
+                    sleep(150);
+                    myRobot.driveStop();
+                    myRobot.pickupPosition();
+                    myRobot.driveBack();
+                    sleep(450);
+                    myRobot.driveStop();
+                    myRobot.closeClaw();
+                    myRobot.drivePosition();
+
                     telemetry.addData("I NEED TO GO: ", "LEFT");
                 }
                 else if(xLoc > calibratedCenter + measuredVisionError){
-                    // TODO make sure this is right of the robot
-                    //run code
+//                     TODO make sure this is right of the robot
+//                     run code
+
+                    myRobot.driveForward();
+                    sleep(1300);
+                    myRobot.turnRight();
+                    sleep(800);
+                    myRobot.driveForward();
+                    sleep(150);
+                    myRobot.driveStop();
+                    myRobot.pickupPosition();
+                    myRobot.driveBack();
+                    sleep(450);
+                    myRobot.driveStop();
+                    myRobot.closeClaw();
+                    myRobot.drivePosition();
+
                     telemetry.addData("I NEED TO GO: ", "RIGHT");
 
                 }
                 else{
-                    // if its in the center we can just run the defualt auto
-//                    defaultDropAndPark();
+//                     if its in the center we can just run the defualt auto
+                    defaultDropAndPark();
                     telemetry.addData("I NEED TO GO: ", "CENTER");
 
                 }
             }
             telemetry.update();
-//            canRun = false; // make sure loop doesn't run again
+//            canRun = false; make sure loop doesn't run again
         }
     }
 
