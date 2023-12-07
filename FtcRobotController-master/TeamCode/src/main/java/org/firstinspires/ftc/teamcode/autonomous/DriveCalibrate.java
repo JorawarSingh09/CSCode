@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
-@Autonomous(name = "Use to calibrate Strafe", group = "Linear OpMode")
+@Autonomous(name = "Use to calibrate", group = "Linear OpMode")
 public class DriveCalibrate extends LinearOpMode {
     CenterStageRobot myRobot;
     Gamepad driver;
@@ -25,19 +25,19 @@ public class DriveCalibrate extends LinearOpMode {
 
         while(opModeIsActive() && canRun){
             myRobot.driveForward();
-            sleep(1800);
+            sleep(1300);
             myRobot.turnLeft();
-            sleep(200);
+            sleep(800);
             myRobot.driveForward();
-            sleep(200);
+            sleep(150);
             myRobot.driveStop();
             myRobot.pickupPosition();
-//            myRobot.driveBack();
-//            sleep(200);
-//            myRobot.turnRight();
-//            sleep(200);
-//            myRobot.driveBack();
-//            sleep(1800);
+            myRobot.driveBack();
+            sleep(450);
+            myRobot.driveStop();
+            myRobot.closeClaw();
+            myRobot.drivePosition();
+
 
 
             canRun = false; // make sure loop doesn't run again
