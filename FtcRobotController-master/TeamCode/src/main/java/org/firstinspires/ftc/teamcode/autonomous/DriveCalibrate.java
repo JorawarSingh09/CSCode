@@ -24,9 +24,22 @@ public class DriveCalibrate extends LinearOpMode {
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
-            myRobot.strafeRight();
-            sleep(3000);
+            myRobot.driveForward();
+            sleep(1800);
+            myRobot.turnLeft();
+            sleep(200);
+            myRobot.driveForward();
+            sleep(200);
             myRobot.driveStop();
+            myRobot.pickupPosition();
+//            myRobot.driveBack();
+//            sleep(200);
+//            myRobot.turnRight();
+//            sleep(200);
+//            myRobot.driveBack();
+//            sleep(1800);
+
+
             canRun = false; // make sure loop doesn't run again
         }
     }
