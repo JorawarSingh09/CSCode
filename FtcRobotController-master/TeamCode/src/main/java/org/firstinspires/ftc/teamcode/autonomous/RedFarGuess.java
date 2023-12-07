@@ -6,8 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
 @Autonomous(name = "Red: far - Place pixel in middle and park", group = "Linear OpMode")
-public class RedFarGuess extends LinearOpMode {
+public class RedFarGuess extends LinearOpMode implements AutonomousBase {
     CenterStageRobot myRobot;
+    public static int driveToScanArea = 1500, turnDistance = 300;
     @Override
     public void runOpMode() throws InterruptedException {
         myRobot = new CenterStageRobot(hardwareMap, telemetry);
@@ -20,30 +21,67 @@ public class RedFarGuess extends LinearOpMode {
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
-            myRobot.driveForward();
-            sleep(1700);
-            myRobot.driveStop();
-            myRobot.pickupPosition();
-            myRobot.driveBack();
-            sleep(500);
-            myRobot.drivePosition();
-            myRobot.strafeRight();
-            sleep(4000);
-            myRobot.driveStop();
-            myRobot.driveForward();
-            sleep(1900);
-            myRobot.strafeRight();
-            sleep(1500);
-            myRobot.driveStop();
-            myRobot.turnRight();
-            sleep(200);
-            myRobot.turnLeft();
-            sleep(200);
-            myRobot.turnRight();
-            sleep(500);
-            myRobot.turnLeft();
-            sleep(200);
-            myRobot.driveStop();
+
         }
+    }
+
+    @Override
+    public void defaultDropAndPark() {
+        myRobot.driveForward();
+        sleep(driveToScanArea);
+        dropPixelCenter();
+        park();
+        shakePixel();
+    }
+
+    @Override
+    public void dropPixelCenter() {
+        myRobot.driveForward();
+        sleep(1700 - driveToScanArea);
+        myRobot.driveStop();
+        myRobot.strafeRight();
+        sleep(400);
+        myRobot.pickupPosition();
+        myRobot.driveBack();
+        sleep(500);
+        myRobot.strafeLeft();
+        sleep(400);
+        myRobot.driveStop();
+    }
+
+    @Override
+    public void dropPixelLeft() {
+        // TODO
+    }
+
+    @Override
+    public void dropPixelRight() {
+        // TODO
+    }
+
+    @Override
+    public void park() {
+        myRobot.drivePosition();
+        myRobot.strafeRight();
+        sleep(4000);
+        myRobot.driveStop();
+        myRobot.driveForward();
+        sleep(1900);
+        myRobot.strafeRight();
+        sleep(1500);
+        myRobot.driveStop();
+    }
+
+    @Override
+    public void shakePixel() {
+        myRobot.turnRight();
+        sleep(200);
+        myRobot.turnLeft();
+        sleep(200);
+        myRobot.turnRight();
+        sleep(500);
+        myRobot.turnLeft();
+        sleep(200);
+        myRobot.driveStop();
     }
 }
