@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -22,9 +23,9 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
     CenterStageRobot myRobot;
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
-
     public int calibratedCenter = 350, measuredVisionError = 40;
     public static int driveToScanArea = 1300, turnDistance = 300;
+    private ElapsedTime runtime = new ElapsedTime();
     @Override
     public void runOpMode() throws InterruptedException {
         myRobot = new CenterStageRobot(hardwareMap, telemetry);
@@ -37,54 +38,45 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
         waitForStart();
         boolean canRun = true;
 
+        runtime.reset();
         while(opModeIsActive() && canRun){
-            // Stop infront of team prop and find where it is, COMP VISION STUFF HERE
-            // check if Prop is in center ie, close to 450
-            // we want to stop where we can see all three positions
-
-//            myRobot.driveForward();
-//            sleep(driveToProp);
-//            myRobot.driveStop();
-
-            Recognition foundProp = getBestFit();
-            if(foundProp == null){
-                //run default auto
+            if(runtime.seconds() > 2) {
+                //give the robot some time to find the object
+                Recognition foundProp = getBestFit();
+                if (foundProp == null) {
+                    //run default auto if nothing found
 //                defaultDropAndPark();
-                telemetry.addData("I FOUND NOTHING", "try another position");
-            }
-            else{
-                //seek prop
-                double xLoc = (foundProp.getLeft() + foundProp.getRight()) / 2 ;
-                telemetry.addData("current Location of Prop: ", xLoc);
-                //if the prop is on the center it will print the value
-                // calibratedCenter +- error
-                if(xLoc < calibratedCenter - measuredVisionError){
-                    // TODO make sure this is left of robot
-                    // run code
-                    telemetry.addData("I NEED TO GO: ", "LEFT");
-                }
-                else if(xLoc > calibratedCenter + measuredVisionError){
-                    // TODO make sure this is right of the robot
-                    //run code
-                    telemetry.addData("I NEED TO GO: ", "RIGHT");
+                    telemetry.addData("I FOUND NOTHING", "try another position");
+                } else {
+                    //seek prop
+                    double xLoc = (foundProp.getLeft() + foundProp.getRight()) / 2;
+                    telemetry.addData("current Location of Prop: ", xLoc);
+                    //if the prop is on the center it will print the value
+                    // calibratedCenter +- error
+                    if (xLoc < calibratedCenter - measuredVisionError) {
+                        // TODO make sure this is left of robot
+//                        dropPixelLeft();
+                        telemetry.addData("I NEED TO GO: ", "LEFT");
+                    } else if (xLoc > calibratedCenter + measuredVisionError) {
+                        // TODO make sure this is right of the robot
+//                        dropPixelRight();
+                        telemetry.addData("I NEED TO GO: ", "RIGHT");
 
-                }
-                else{
-                    // if its in the center we can just run the defualt auto
+                    } else {
+                        // if its in the center we can just run the defualt auto
 //                    defaultDropAndPark();
-                    telemetry.addData("I NEED TO GO: ", "CENTER");
+                        telemetry.addData("I NEED TO GO: ", "CENTER");
 
+                    }
                 }
-            }
-            telemetry.update();
+                telemetry.update();
 //            canRun = false; // make sure loop doesn't run again
+            }
         }
     }
 
     @Override
     public void defaultDropAndPark() {
-        myRobot.driveForward();
-        sleep(1800 - driveToScanArea);
         dropPixelCenter();
         park();
         shakePixel();
@@ -93,7 +85,7 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
     @Override
     public void dropPixelCenter() {
         myRobot.driveForward();
-        sleep(1800 - driveToScanArea);
+        sleep(1800);
         myRobot.driveStop();
         myRobot.strafeRight();
         sleep(400);
@@ -109,12 +101,36 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
 
     @Override
     public void dropPixelLeft() {
-
+        myRobot.driveForward();
+        sleep(1300);
+        myRobot.turnLeft();
+        sleep(800);
+        myRobot.driveForward();
+        sleep(150);
+        myRobot.driveStop();
+        myRobot.pickupPosition();
+        myRobot.driveBack();
+        sleep(450);
+        myRobot.driveStop();
+        myRobot.closeClaw();
+        myRobot.drivePosition();
     }
 
     @Override
     public void dropPixelRight() {
-
+        myRobot.driveForward();
+        sleep(1300);
+        myRobot.turnRight();
+        sleep(800);
+        myRobot.driveForward();
+        sleep(150);
+        myRobot.driveStop();
+        myRobot.pickupPosition();
+        myRobot.driveBack();
+        sleep(450);
+        myRobot.driveStop();
+        myRobot.closeClaw();
+        myRobot.drivePosition();
     }
 
     @Override

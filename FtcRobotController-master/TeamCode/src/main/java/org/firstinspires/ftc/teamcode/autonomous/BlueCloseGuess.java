@@ -41,7 +41,7 @@ public class BlueCloseGuess extends LinearOpMode implements AutonomousBase{
     @Override
     public void dropPixelCenter() {
         myRobot.driveForward();
-        sleep(1800 - driveToScanArea);
+        sleep(1800);
         myRobot.driveStop();
         myRobot.strafeRight();
         sleep(400);
@@ -57,12 +57,36 @@ public class BlueCloseGuess extends LinearOpMode implements AutonomousBase{
 
     @Override
     public void dropPixelLeft() {
-
+        myRobot.driveForward();
+        sleep(1300);
+        myRobot.turnLeft();
+        sleep(800);
+        myRobot.driveForward();
+        sleep(150);
+        myRobot.driveStop();
+        myRobot.pickupPosition();
+        myRobot.driveBack();
+        sleep(450);
+        myRobot.driveStop();
+        myRobot.closeClaw();
+        myRobot.drivePosition();
     }
 
     @Override
     public void dropPixelRight() {
-
+        myRobot.driveForward();
+        sleep(1300);
+        myRobot.turnRight();
+        sleep(800);
+        myRobot.driveForward();
+        sleep(150);
+        myRobot.driveStop();
+        myRobot.pickupPosition();
+        myRobot.driveBack();
+        sleep(450);
+        myRobot.driveStop();
+        myRobot.closeClaw();
+        myRobot.drivePosition();
     }
 
     @Override
