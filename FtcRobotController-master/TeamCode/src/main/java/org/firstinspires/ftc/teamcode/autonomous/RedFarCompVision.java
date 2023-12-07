@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "Red: close - Implements comp vision to place pixel",
+@Autonomous(name = "Red: far - Implements comp vision to place pixel",
         group = "Linear OpMode")
 public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TFBase{
     CenterStageRobot myRobot;
@@ -46,9 +46,6 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     private VisionPortal visionPortal;
 
 
-    private ExposureControl myExposureControl;
-
-
     // variable for autonomous
     public static int driveToProp = 1200, turnDistance = 300, calibratedCenter = 350,
         measuredVisionError = 40;
@@ -71,9 +68,6 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
         initTfod();
 
         waitForStart();
-        myExposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        myExposureControl.setMode(ExposureControl.Mode.Manual);
-        myExposureControl.setExposure(99999, TimeUnit.MILLISECONDS);
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
@@ -202,11 +196,6 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
         return bestFit;
     }
 
-    /**
-     * get the recognition with the smallest bounding box instead, helps filter out random
-     * detections
-     * @return recognition with the smallest bounding box
-     */
     @Override
     public Recognition getSmallestBoundingBox() {
         List<Recognition> currentRecognitions = tfod.getRecognitions();
