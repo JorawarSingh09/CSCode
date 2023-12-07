@@ -1,0 +1,259 @@
+package org.firstinspires.ftc.teamcode.autonomous;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.CenterStageRobot;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+@Config
+@Autonomous(name = "Red: far - Implements comp vision to place pixel, Currently does NOT park",
+        group = "Linear" +
+        " OpMode")
+public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TFBase{
+    CenterStageRobot myRobot;
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry dashTelemetry = dashboard.getTelemetry();
+
+    // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
+    // this is only used for Android Studio when using models in Assets.
+    private static final String TFOD_MODEL_ASSET = "RedProp.tflite";
+    // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
+    // this is used when uploading models directly to the RC using the model upload interface.
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/RedProp.tflite";
+    // Define the labels recognized in the model for TFOD (must be in training order!)
+    private static final String[] LABELS = {
+            "Prop",
+    };
+
+    /**
+     * The variable to store our instance of the TensorFlow Object Detection processor.
+     */
+    private TfodProcessor tfod;
+
+    /**
+     * The variable to store our instance of the vision portal.
+     */
+    private VisionPortal visionPortal;
+
+
+    private ExposureControl myExposureControl;
+
+
+    // variable for autonomous
+    public static int driveToProp = 1800, turnDistance = 300, calibratedCenter = 450,
+        measuredVisionError = 20;
+
+    // camera values, for calibrating to lighting and etc
+    public static int exposure = 30, gain, whiteBalance, focus, ptz;
+    @Override
+    public void runOpMode() throws InterruptedException {
+        myRobot = new CenterStageRobot(hardwareMap, telemetry);
+
+//        myRobot.startPosition();
+
+        telemetry.addData("Status", "Initialized");
+        dashTelemetry.addData("Status", "Initialized");
+
+        dashTelemetry.update();
+        telemetry.update();
+
+        // start TensorFlow
+        initTfod();
+
+        waitForStart();
+        myExposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        myExposureControl.setMode(ExposureControl.Mode.Manual);
+        myExposureControl.setExposure(99999, TimeUnit.MILLISECONDS);
+        boolean canRun = true;
+
+        while(opModeIsActive() && canRun){
+            myRobot.driveForward();
+            sleep(driveToProp);
+            myRobot.driveStop();
+            // Stop infront of team prop and find where it is, COMP VISION STUFF HERE
+            // check if Prop is in center ie, close to 450
+            // we want to stop where we can see all three positions
+            Recognition foundProp = getBestFit();
+            if(foundProp == null){
+                //Seek for prop
+            }
+
+            // run this if nothing found
+            defaultDropAndPark();
+        }
+    }
+
+    @Override
+    public void initTfod() {
+
+        // Create the TensorFlow processor by using a builder.
+        tfod = new TfodProcessor.Builder()
+
+                // With the following lines commented out, the default TfodProcessor Builder
+                // will load the default model for the season. To define a custom model to load,
+                // choose one of the following:
+                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
+                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
+                .setModelAssetName(TFOD_MODEL_ASSET)
+                //.setModelFileName(TFOD_MODEL_FILE)
+
+                // The following default settings are available to un-comment and edit as needed to
+                // set parameters for custom models.
+                .setModelLabels(LABELS)
+                //.setIsModelTensorFlow2(true)
+                //.setIsModelQuantized(true)
+                //.setModelInputSize(300)
+                //.setModelAspectRatio(16.0 / 9.0)
+
+                .build();
+
+        // Create the vision portal by using a builder.
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+        WebcamName camera = hardwareMap.get(WebcamName.class, "Webcam");
+        // Set the camera (webcam vs. built-in RC phone camera).
+        builder.setCamera(camera);
+
+        // Choose a camera resolution. Not all cameras support all resolutions.
+//        builder.setCameraResolution(new Size(640, 480));
+//
+        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
+        //builder.enableLiveView(true);
+
+        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
+        //builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+
+        // Choose whether or not LiveView stops if no processors are enabled.
+        // If set "true", monitor shows solid orange screen if no processors enabled.
+        // If set "false", monitor shows camera view without annotations.
+        //builder.setAutoStopLiveView(false);
+
+        // Set and enable the processor.
+        builder.addProcessor(tfod);
+
+        // Build the Vision Portal, using the above settings.
+        visionPortal = builder.build();
+
+        // Set confidence threshold for TFOD recognitions, at any time.
+        tfod.setMinResultConfidence(0.7f);
+
+        // Disable or re-enable the TFOD processor at any time.
+        //visionPortal.setProcessorEnabled(tfod, true);
+
+    }
+
+    /**
+     * get the recognition that has the greatest confidence
+     * @return recognition with the highest confidence
+     */
+
+    @Override
+    public Recognition getBestFit(){
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+
+        if (currentRecognitions.isEmpty()) {
+            return null; // No recognitions, return null or handle accordingly
+        }
+
+        Recognition bestFit = currentRecognitions.get(0); // Start with the first recognition
+
+        // Iterate through the list of recognitions to find the one with the highest confidence
+        for (Recognition recognition : currentRecognitions) {
+            if (recognition.getConfidence() > bestFit.getConfidence()) {
+                bestFit = recognition; // Update bestFit if a higher confidence is found
+            }
+        }
+
+        return bestFit;
+    }
+
+    /**
+     * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
+     */
+
+    @Override
+    public void telemetryTfod() {
+
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+        // Step through the list of recognitions and display info for each one.
+        for (Recognition recognition : currentRecognitions) {
+            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)",
+                    recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- raw left", "%.0f", recognition.getLeft());
+            telemetry.addData("- raw right", " %.0f", recognition.getRight());
+            telemetry.addData("- Size", "%.0f x %.0f",
+                    recognition.getWidth(), recognition.getHeight());
+
+            dashTelemetry.addData("", " ");
+            dashTelemetry.addData("Image", "%s (%.0f %% Conf.)",
+                    recognition.getLabel(), recognition.getConfidence() * 100);
+            dashTelemetry.addData("- Position", "%.0f / %.0f", x, y);
+            dashTelemetry.update();
+        }   // end for() loop
+
+    }
+
+    @Override
+    public void defaultDropAndPark(){
+        myRobot.driveForward();
+        sleep(1800 - driveToProp);
+        myRobot.driveStop();
+        dropPixel();
+        myRobot.driveBack();
+        sleep(1100);
+        myRobot.driveStop();
+        myRobot.strafeRight();
+        sleep(8000);
+        myRobot.driveForward();
+        sleep(2000);
+        myRobot.strafeRight();
+        sleep(2000);
+        myRobot.driveStop();
+        shakePixel();
+
+    }
+
+    @Override
+    public void dropPixel() {
+        myRobot.strafeRight();
+        sleep(400);
+        myRobot.pickupPosition();
+        sleep(500);
+        myRobot.driveBack();
+        sleep(200);
+        myRobot.strafeLeft();
+        myRobot.closeClaw();
+        myRobot.drivePosition();
+        sleep(400);
+    }
+
+    @Override
+    public void shakePixel(){
+        myRobot.turnRight();
+        sleep(200);
+        myRobot.turnLeft();
+        sleep(200);
+        myRobot.turnRight();
+        sleep(500);
+        myRobot.turnLeft();
+        sleep(200);
+        myRobot.driveStop();
+    }
+}

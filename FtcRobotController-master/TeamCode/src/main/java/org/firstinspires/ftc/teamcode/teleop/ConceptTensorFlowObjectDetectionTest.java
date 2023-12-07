@@ -182,6 +182,28 @@ public class ConceptTensorFlowObjectDetectionTest extends LinearOpMode {
     }   // end method initTfod()
 
     /**
+     * get the recognition that has the greatest confidence
+     * @return
+     */
+    private Recognition getBestFit(){
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+
+        if (currentRecognitions.isEmpty()) {
+            return null; // No recognitions, return null or handle accordingly
+        }
+
+        Recognition bestFit = currentRecognitions.get(0); // Start with the first recognition
+
+        // Iterate through the list of recognitions to find the one with the highest confidence
+        for (Recognition recognition : currentRecognitions) {
+            if (recognition.getConfidence() > bestFit.getConfidence()) {
+                bestFit = recognition; // Update bestFit if a higher confidence is found
+            }
+        }
+
+        return bestFit;
+    }
+    /**
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     private void telemetryTfod() {
@@ -211,5 +233,11 @@ public class ConceptTensorFlowObjectDetectionTest extends LinearOpMode {
         }   // end for() loop
 
     }   // end method telemetryTfod()
+
+
+    // Methods for movement here
+    private void defaultDropAndPark(){
+
+    }
 
 }   // end class
