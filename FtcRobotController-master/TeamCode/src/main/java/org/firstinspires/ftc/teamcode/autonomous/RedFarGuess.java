@@ -21,24 +21,28 @@ public class RedFarGuess extends LinearOpMode {
 
         while(opModeIsActive() && canRun){
             myRobot.driveForward();
-            sleep(1800);
+            sleep(1700);
             myRobot.driveStop();
             myRobot.pickupPosition();
+            myRobot.driveBack();
             sleep(500);
-            myRobot.driveBack();
-            sleep(200);
-            myRobot.driveStop();
-            myRobot.closeClaw();
             myRobot.drivePosition();
-            myRobot.driveBack();
-            sleep(1100);
+            myRobot.strafeRight();
+            sleep(4000);
             myRobot.driveStop();
-            myRobot.strafeRight();
-            sleep(8000);
             myRobot.driveForward();
-            sleep(2000);
+            sleep(1900);
             myRobot.strafeRight();
-            sleep(2000);
+            sleep(1500);
+            myRobot.driveStop();
+            myRobot.turnRight();
+            sleep(200);
+            myRobot.turnLeft();
+            sleep(200);
+            myRobot.turnRight();
+            sleep(500);
+            myRobot.turnLeft();
+            sleep(200);
             myRobot.driveStop();
         }
     }

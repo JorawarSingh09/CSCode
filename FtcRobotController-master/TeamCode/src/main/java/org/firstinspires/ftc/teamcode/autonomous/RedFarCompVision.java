@@ -17,9 +17,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "Red: far - Implements comp vision to place pixel, Currently does NOT park",
-        group = "Linear" +
-        " OpMode")
+@Autonomous(name = "Red: close - Implements comp vision to place pixel",
+        group = "Linear OpMode")
 public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TFBase{
     CenterStageRobot myRobot;
     FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -51,8 +50,8 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
 
 
     // variable for autonomous
-    public static int driveToProp = 1800, turnDistance = 300, calibratedCenter = 450,
-        measuredVisionError = 20;
+    public static int driveToProp = 1200, turnDistance = 300, calibratedCenter = 350,
+        measuredVisionError = 40;
 
     // camera values, for calibrating to lighting and etc
     public static int exposure = 30, gain, whiteBalance, focus, ptz;
@@ -78,19 +77,45 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
-            myRobot.driveForward();
-            sleep(driveToProp);
-            myRobot.driveStop();
             // Stop infront of team prop and find where it is, COMP VISION STUFF HERE
             // check if Prop is in center ie, close to 450
             // we want to stop where we can see all three positions
+
+//            myRobot.driveForward();
+//            sleep(driveToProp);
+//            myRobot.driveStop();
+
             Recognition foundProp = getBestFit();
             if(foundProp == null){
-                //Seek for prop
+                //run default auto
+//                defaultDropAndPark();
+                telemetry.addData("I FOUND NOTHING", "try another position");
             }
+            else{
+                //seek prop
+                double xLoc = (foundProp.getLeft() + foundProp.getRight()) / 2 ;
+                telemetry.addData("current Location of Prop: ", xLoc);
+                //if the prop is on the center it will print the value
+                // calibratedCenter +- error
+                if(xLoc < calibratedCenter - measuredVisionError){
+                    // TODO make sure this is left of robot
+                    // run code
+                    telemetry.addData("I NEED TO GO: ", "LEFT");
+                }
+                else if(xLoc > calibratedCenter + measuredVisionError){
+                    // TODO make sure this is right of the robot
+                    //run code
+                    telemetry.addData("I NEED TO GO: ", "RIGHT");
 
-            // run this if nothing found
-            defaultDropAndPark();
+                }
+                else{
+                    // if its in the center we can just run the defualt auto
+//                    defaultDropAndPark();
+                    telemetry.addData("I NEED TO GO: ", "CENTER");
+
+                }
+            }
+            telemetry.update();
         }
     }
 
@@ -178,9 +203,35 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     }
 
     /**
+     * get the recognition with the smallest bounding box instead, helps filter out random
+     * detections
+     * @return recognition with the smallest bounding box
+     */
+    @Override
+    public Recognition getSmallestBoundingBox() {
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+
+        if (currentRecognitions.isEmpty()) {
+            return null; // No recognitions, return null or handle accordingly
+        }
+
+        Recognition smallestBoundingBox = currentRecognitions.get(0); // Start with the first recognition
+
+        // Iterate through the list of recognitions to find the one with the smallest bounding box
+        for (Recognition recognition : currentRecognitions) {
+            double sizeCurrent = (recognition.getRight() - recognition.getLeft()) * (recognition.getBottom() - recognition.getTop());
+            double sizeSmallest = (smallestBoundingBox.getRight() - smallestBoundingBox.getLeft()) * (smallestBoundingBox.getBottom() - smallestBoundingBox.getTop());
+
+            if (sizeCurrent < sizeSmallest) {
+                smallestBoundingBox = recognition; // Update smallestBoundingBox if a smaller size is found
+            }
+        }
+
+        return smallestBoundingBox;
+    }
+    /**
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
-
     @Override
     public void telemetryTfod() {
 
@@ -213,9 +264,8 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     @Override
     public void defaultDropAndPark(){
         myRobot.driveForward();
-        sleep(1800 - driveToProp);
-        myRobot.driveStop();
-        dropPixel();
+        sleep(driveToProp);
+        dropPixelCenter();
         myRobot.driveBack();
         sleep(1100);
         myRobot.driveStop();
@@ -231,7 +281,25 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     }
 
     @Override
-    public void dropPixel() {
+    public void park(){
+        myRobot.driveBack();
+        sleep(1100);
+        myRobot.driveStop();
+        myRobot.strafeRight();
+        sleep(8000);
+        myRobot.driveForward();
+        sleep(2000);
+        myRobot.strafeRight();
+        sleep(2000);
+        myRobot.driveStop();
+        shakePixel();
+
+    }
+
+    @Override
+    public void dropPixelCenter() {
+        myRobot.driveForward();
+        sleep(1800 - driveToProp);
         myRobot.strafeRight();
         sleep(400);
         myRobot.pickupPosition();
@@ -242,6 +310,17 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
         myRobot.closeClaw();
         myRobot.drivePosition();
         sleep(400);
+        //
+    }
+
+    @Override
+    public void dropPixelLeft() {
+        // write code for this
+    }
+
+    @Override
+    public void dropPixelRight() {
+        //write code for this
     }
 
     @Override

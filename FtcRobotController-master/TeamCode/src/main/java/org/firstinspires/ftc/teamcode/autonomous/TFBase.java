@@ -19,6 +19,7 @@ public interface TFBase {
      * @return recognition with the highest confidence
      */
     public Recognition getBestFit();
+    public Recognition getSmallestBoundingBox();
 
 
 

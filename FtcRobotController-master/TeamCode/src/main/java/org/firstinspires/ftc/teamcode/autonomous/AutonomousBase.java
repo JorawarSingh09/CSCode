@@ -7,9 +7,24 @@ public interface AutonomousBase {
     public void defaultDropAndPark();
 
     /**
-     * Strafe and place pixel on line
+     * Strafe and place pixel on Center and return to Positio
      */
-    public void dropPixel();
+    public void dropPixelCenter();
+
+    /**
+     * Strafe and place pixel on left and return to Positio
+     */
+    public void dropPixelLeft();
+
+    /**
+     * Strafe and place pixel on Right and return to Position
+     */
+    public void dropPixelRight();
+
+    /**
+     * take robot to park and drop another pixel in
+     */
+    public void park();
 
     /**
      * drop a pixel into parking area by shaking
