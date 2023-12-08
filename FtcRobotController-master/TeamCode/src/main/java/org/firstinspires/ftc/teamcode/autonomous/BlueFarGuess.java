@@ -38,7 +38,7 @@ public class BlueFarGuess extends LinearOpMode implements AutonomousBase{
     public void dropPixelCenter() {
         myRobot.pushPosition();
         myRobot.driveForward();
-        sleep(1800);
+        sleep(1715);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveStop();

@@ -90,7 +90,7 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
     public void dropPixelCenter() {
         myRobot.pushPosition();
         myRobot.driveForward();
-        sleep(1800);
+        sleep(1550);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveStop();
