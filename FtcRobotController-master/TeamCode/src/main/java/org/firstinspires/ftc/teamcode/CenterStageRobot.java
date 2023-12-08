@@ -219,6 +219,15 @@ public class CenterStageRobot {
         }
     }
 
+    public void pushPosition(){
+        grabberArm.closeClaw();
+        grabberArm.setArmPosition(200);
+        grabberArm.manualPower();
+        grabberArm.setWristPosition(0);
+        linearSlides.bottomPosition();
+        grabberArm.setArmPosition(20);
+    }
+
     /**
      * mechanism position when you need to pickup the pixel
      */

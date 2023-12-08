@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@Autonomous(name = "Red: far - Implements comp vision to place pixel",
+@Autonomous(name = "Red COMP VISION: far - NEEDS TO BE TESTED",
         group = "Linear OpMode")
 public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TFBase{
     CenterStageRobot myRobot;
@@ -26,10 +27,11 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "RedProp.tflite";
+    private static final String TFOD_MODEL_ASSET = "redpropRESMED.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/RedProp.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/redpropRESMED" +
+            ".tflite";
     // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
             "Prop",
@@ -45,10 +47,10 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
      */
     private VisionPortal visionPortal;
 
-
+    ElapsedTime runtime = new ElapsedTime();
     // variable for autonomous
     public static int driveToProp = 1200, turnDistance = 300, calibratedCenter = 350,
-        measuredVisionError = 40;
+        measuredVisionError = 60;
 
     // camera values, for calibrating to lighting and etc
     public static int exposure = 30, gain, whiteBalance, focus, ptz;
@@ -56,7 +58,7 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     public void runOpMode() throws InterruptedException {
         myRobot = new CenterStageRobot(hardwareMap, telemetry);
 
-//        myRobot.startPosition();
+        myRobot.startPosition();
 
         telemetry.addData("Status", "Initialized");
         dashTelemetry.addData("Status", "Initialized");
@@ -69,44 +71,44 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
 
         waitForStart();
         boolean canRun = true;
-
+        runtime.reset();
         while(opModeIsActive() && canRun){
             // Stop infront of team prop and find where it is, COMP VISION STUFF HERE
             // check if Prop is in center ie, close to 450
             // we want to stop where we can see all three positions
 
-//            myRobot.driveForward();
-//            sleep(driveToProp);
-//            myRobot.driveStop();
 
             Recognition foundProp = getBestFit();
-            if(foundProp == null){
-                //run default auto
-//                defaultDropAndPark();
-                telemetry.addData("I FOUND NOTHING", "try another position");
-            }
-            else{
-                //seek prop
-                double xLoc = (foundProp.getLeft() + foundProp.getRight()) / 2 ;
-                telemetry.addData("current Location of Prop: ", xLoc);
-                //if the prop is on the center it will print the value
-                // calibratedCenter +- error
-                if(xLoc < calibratedCenter - measuredVisionError){
-                    // TODO make sure this is left of robot
-                    // run code
-                    telemetry.addData("I NEED TO GO: ", "LEFT");
-                }
-                else if(xLoc > calibratedCenter + measuredVisionError){
-                    // TODO make sure this is right of the robot
-                    //run code
-                    telemetry.addData("I NEED TO GO: ", "RIGHT");
+            if(runtime.seconds() > 2) {
+                if (foundProp == null) {
+                    //run default auto
+                    defaultDropAndPark();
+                    canRun = false; // make sure loop doesn't run again
+                    telemetry.addData("I FOUND NOTHING", "try another position");
+                } else {
+                    //seek prop
+                    double xLoc = (foundProp.getLeft() + foundProp.getRight()) / 2;
+                    telemetry.addData("current Location of Prop: ", xLoc);
+                    //if the prop is on the center it will print the value
+                    // calibratedCenter +- error
+                    if (xLoc < calibratedCenter - measuredVisionError) {
+                        // TODO make sure this is left of robot
+                        dropPixelRight();
+                        canRun = false; // make sure loop doesn't run again
+                        telemetry.addData("I NEED TO GO: ", "LEFT");
+                    } else if (xLoc > calibratedCenter + measuredVisionError) {
+                        // TODO make sure this is right of the robot
+                        dropPixelRight();
+                        canRun = false; // make sure loop doesn't run again
+                        telemetry.addData("I NEED TO GO: ", "RIGHT");
 
-                }
-                else{
-                    // if its in the center we can just run the defualt auto
-//                    defaultDropAndPark();
-                    telemetry.addData("I NEED TO GO: ", "CENTER");
+                    } else {
+                        // if its in the center we can just run the defualt auto
+                        defaultDropAndPark();
+                        canRun = false; // make sure loop doesn't run again
+                        telemetry.addData("I NEED TO GO: ", "CENTER");
 
+                    }
                 }
             }
             telemetry.update();
@@ -251,77 +253,92 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     }
 
     @Override
-    public void defaultDropAndPark(){
-        myRobot.driveForward();
-        sleep(driveToProp);
+    public void defaultDropAndPark() {
         dropPixelCenter();
-        myRobot.driveBack();
-        sleep(1100);
-        myRobot.driveStop();
-        myRobot.strafeRight();
-        sleep(8000);
-        myRobot.driveForward();
-        sleep(2000);
-        myRobot.strafeRight();
-        sleep(2000);
-        myRobot.driveStop();
+        park();
         shakePixel();
-
-    }
-
-    @Override
-    public void park(){
-        myRobot.driveBack();
-        sleep(1100);
-        myRobot.driveStop();
-        myRobot.strafeRight();
-        sleep(8000);
-        myRobot.driveForward();
-        sleep(2000);
-        myRobot.strafeRight();
-        sleep(2000);
-        myRobot.driveStop();
-        shakePixel();
-
     }
 
     @Override
     public void dropPixelCenter() {
+        myRobot.pushPosition();
         myRobot.driveForward();
-        sleep(1800 - driveToProp);
-        myRobot.strafeRight();
-        sleep(400);
+        sleep(1800);
+        myRobot.driveStop();
         myRobot.pickupPosition();
-        sleep(500);
+        myRobot.driveStop();
+        sleep(100);
         myRobot.driveBack();
         sleep(200);
-        myRobot.strafeLeft();
+        myRobot.driveStop();
         myRobot.closeClaw();
         myRobot.drivePosition();
-        sleep(400);
-        //
     }
 
     @Override
     public void dropPixelLeft() {
-        // write code for this
+        myRobot.driveForward();
+        sleep(1300);
+        myRobot.turnLeft();
+        sleep(800);
+        myRobot.driveForward();
+        sleep(150);
+        myRobot.driveStop();
+        myRobot.pickupPosition();
+        myRobot.driveBack();
+        sleep(450);
+        myRobot.driveStop();
+        myRobot.closeClaw();
+        myRobot.drivePosition();
     }
 
     @Override
     public void dropPixelRight() {
-        //write code for this
+        myRobot.driveForward();
+        sleep(1300);
+        myRobot.turnRight();
+        sleep(800);
+        myRobot.driveForward();
+        sleep(150);
+        myRobot.driveStop();
+        myRobot.pickupPosition();
+        myRobot.driveBack();
+        sleep(450);
+        myRobot.driveStop();
+        myRobot.closeClaw();
+        myRobot.drivePosition();
     }
 
     @Override
-    public void shakePixel(){
+    public void park() {
+        myRobot.driveBack();
+        sleep(1100);
+        myRobot.strafeRight();
+        sleep(8000);
+        myRobot.driveStop();
+        myRobot.driveForward();
+        sleep(1900);
+        myRobot.strafeRight();
+        sleep(1500);
+        myRobot.driveStop();
+    }
+
+    @Override
+    public void shakePixel() {
+        myRobot.turnLeft();
+        sleep(1600);//turn 180 degrees
+        myRobot.turnLeft();
+        sleep(200);
+        myRobot.turnRight();
+        sleep(200);
+        myRobot.turnLeft();
+        sleep(500);
         myRobot.turnRight();
         sleep(200);
         myRobot.turnLeft();
         sleep(200);
         myRobot.turnRight();
         sleep(500);
-        myRobot.turnLeft();
-        sleep(200);
         myRobot.driveStop();
     }
 }

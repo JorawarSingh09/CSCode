@@ -12,11 +12,11 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Autonomous(name = "BLUE COMP VISION: close",
+@Autonomous(name = "BLUE COMP VISION: close - Needs to be tested",
         group = "Linear OpMode")
 public class BlueCloseComputerVision extends LinearOpMode implements TFBase, AutonomousBase{
-    private static final String TFOD_MODEL_ASSET = "RedProp.tflite";
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/RedProp.tflite";
+    private static final String TFOD_MODEL_ASSET = "bluepropRESMED.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/bluepropRESMED.tflite";
     private static final String[] LABELS = {
             "Prop",
     };
@@ -45,7 +45,8 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
                 Recognition foundProp = getBestFit();
                 if (foundProp == null) {
                     //run default auto if nothing found
-//                defaultDropAndPark();
+                    defaultDropAndPark();
+                    canRun = false; // make sure loop doesn't run again
                     telemetry.addData("I FOUND NOTHING", "try another position");
                 } else {
                     //seek prop
@@ -55,22 +56,24 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
                     // calibratedCenter +- error
                     if (xLoc < calibratedCenter - measuredVisionError) {
                         // TODO make sure this is left of robot
-//                        dropPixelLeft();
+                        dropPixelLeft();
+                        canRun = false; // make sure loop doesn't run again
                         telemetry.addData("I NEED TO GO: ", "LEFT");
                     } else if (xLoc > calibratedCenter + measuredVisionError) {
                         // TODO make sure this is right of the robot
-//                        dropPixelRight();
+                        dropPixelRight();
+                        canRun = false; // make sure loop doesn't run again
                         telemetry.addData("I NEED TO GO: ", "RIGHT");
 
                     } else {
                         // if its in the center we can just run the defualt auto
-//                    defaultDropAndPark();
+                        defaultDropAndPark();
+                        canRun = false; // make sure loop doesn't run again
                         telemetry.addData("I NEED TO GO: ", "CENTER");
 
                     }
                 }
                 telemetry.update();
-//            canRun = false; // make sure loop doesn't run again
             }
         }
     }
@@ -139,7 +142,7 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
         sleep(1100);
         myRobot.driveStop();
         myRobot.strafeLeft();
-        sleep(8000);
+        sleep(4000);
         myRobot.driveForward();
         sleep(2000);
         myRobot.strafeLeft();
@@ -212,7 +215,7 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
         visionPortal = builder.build();
 
         // Set confidence threshold for TFOD recognitions, at any time.
-        tfod.setMinResultConfidence(0.7f);
+        tfod.setMinResultConfidence(0.6f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);

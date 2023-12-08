@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
-@Autonomous(name = "Blue: close", group = "Linear OpMode")
+@Autonomous(name = "Blue: Close - NEEDS TO BE TESTED", group = "Linear OpMode")
 public class BlueCloseGuess extends LinearOpMode implements AutonomousBase{
     CenterStageRobot myRobot;
     public static int driveToScanArea = 1300, turnDistance = 300;
@@ -13,7 +13,7 @@ public class BlueCloseGuess extends LinearOpMode implements AutonomousBase{
     public void runOpMode() throws InterruptedException {
         myRobot = new CenterStageRobot(hardwareMap, telemetry);
 
-//        myRobot.startPosition();
+        myRobot.startPosition();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -21,18 +21,13 @@ public class BlueCloseGuess extends LinearOpMode implements AutonomousBase{
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
-//            myRobot.driveForward();
-//            sleep(driveToScanArea);
-//            myRobot.driveStop();
-//            defaultDropAndPark();
+            defaultDropAndPark();
             canRun = false; // make sure loop doesn't run again
         }
     }
 
     @Override
     public void defaultDropAndPark() {
-        myRobot.driveForward();
-        sleep(1800 - driveToScanArea);
         dropPixelCenter();
         park();
         shakePixel();
@@ -95,7 +90,7 @@ public class BlueCloseGuess extends LinearOpMode implements AutonomousBase{
         sleep(1100);
         myRobot.driveStop();
         myRobot.strafeLeft();
-        sleep(8000);
+        sleep(4000);
         myRobot.driveForward();
         sleep(2000);
         myRobot.strafeLeft();

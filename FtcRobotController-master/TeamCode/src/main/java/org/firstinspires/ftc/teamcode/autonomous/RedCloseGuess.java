@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
-@Autonomous(name = "Red: close - Place pixel close and park", group = "Linear OpMode")
+@Autonomous(name = "Red: close NEEDS TO BE TESTED", group = "Linear OpMode")
 public class RedCloseGuess extends LinearOpMode implements AutonomousBase{
     CenterStageRobot myRobot;
     public static int driveToScanArea = 1300, turnDistance = 300;
@@ -33,8 +33,6 @@ public class RedCloseGuess extends LinearOpMode implements AutonomousBase{
 
     @Override
     public void defaultDropAndPark() {
-        myRobot.driveForward();
-        sleep(driveToScanArea);
         dropPixelCenter();
         park();
         shakePixel();
@@ -97,7 +95,7 @@ public class RedCloseGuess extends LinearOpMode implements AutonomousBase{
         sleep(1100);
         myRobot.driveStop();
         myRobot.strafeRight();
-        sleep(8000);
+        sleep(4000);
         myRobot.driveForward();
         sleep(2000);
         myRobot.strafeRight();
@@ -107,14 +105,20 @@ public class RedCloseGuess extends LinearOpMode implements AutonomousBase{
 
     @Override
     public void shakePixel() {
+        myRobot.turnLeft();
+        sleep(1600);//turn 180 degrees
+        myRobot.turnLeft();
+        sleep(200);
+        myRobot.turnRight();
+        sleep(200);
+        myRobot.turnLeft();
+        sleep(500);
         myRobot.turnRight();
         sleep(200);
         myRobot.turnLeft();
         sleep(200);
         myRobot.turnRight();
         sleep(500);
-        myRobot.turnLeft();
-        sleep(200);
         myRobot.driveStop();
     }
 }

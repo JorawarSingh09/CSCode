@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
 
-@Autonomous(name = "Blue: Far - place pixel in middle and park", group = "Linear OpMode")
+@Autonomous(name = "Blue: Far - NEEDS TO BE TESTED", group = "Linear OpMode")
 public class BlueFarGuess extends LinearOpMode implements AutonomousBase{
     CenterStageRobot myRobot;
     public static int driveToScanArea = 1500, turnDistance = 300;
@@ -28,8 +28,6 @@ public class BlueFarGuess extends LinearOpMode implements AutonomousBase{
 
     @Override
     public void defaultDropAndPark() {
-        myRobot.driveForward();
-        sleep(driveToScanArea);
         dropPixelCenter();
         park();
         shakePixel();
@@ -38,19 +36,18 @@ public class BlueFarGuess extends LinearOpMode implements AutonomousBase{
 
     @Override
     public void dropPixelCenter() {
+        myRobot.pushPosition();
         myRobot.driveForward();
         sleep(1800);
         myRobot.driveStop();
-        myRobot.strafeRight();
-        sleep(400);
         myRobot.pickupPosition();
+        myRobot.driveStop();
+        sleep(100);
         myRobot.driveBack();
-        sleep(500);
+        sleep(200);
+        myRobot.driveStop();
         myRobot.closeClaw();
         myRobot.drivePosition();
-        myRobot.strafeLeft();
-        sleep(400);
-        myRobot.driveStop();
     }
 
     @Override
@@ -89,9 +86,10 @@ public class BlueFarGuess extends LinearOpMode implements AutonomousBase{
 
     @Override
     public void park() {
-        myRobot.drivePosition();
+        myRobot.driveBack();
+        sleep(1100);
         myRobot.strafeLeft();
-        sleep(4000);
+        sleep(8000);
         myRobot.driveStop();
         myRobot.driveForward();
         sleep(1900);
@@ -110,6 +108,10 @@ public class BlueFarGuess extends LinearOpMode implements AutonomousBase{
         sleep(500);
         myRobot.turnRight();
         sleep(200);
+        myRobot.turnLeft();
+        sleep(200);
+        myRobot.turnRight();
+        sleep(500);
         myRobot.driveStop();
     }
 }
