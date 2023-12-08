@@ -269,7 +269,7 @@ public class CenterStageRobot {
 
         grabberArm.closeClaw();
 
-        grabberArm.setArmPosition(810);
+        grabberArm.setArmPosition(1100);
 
         linearSlides.topPosition();
     }
