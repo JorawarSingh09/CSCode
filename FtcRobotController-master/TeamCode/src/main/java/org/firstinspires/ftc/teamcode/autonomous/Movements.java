@@ -24,6 +24,7 @@ public class Movements extends LinearOpMode implements AutonomousBase {
 
     @Override
     public void dropPixelCenter() {
+        myRobot.pushPosition();
         myRobot.driveForward();
         sleep(1550);
         myRobot.driveStop();
@@ -39,6 +40,7 @@ public class Movements extends LinearOpMode implements AutonomousBase {
 
     @Override
     public void dropPixelLeft() {
+        myRobot.pushPosition();
         myRobot.driveForward();
         sleep(1600);
         myRobot.turnLeft();
@@ -56,6 +58,7 @@ public class Movements extends LinearOpMode implements AutonomousBase {
 
     @Override
     public void dropPixelRight() {
+        myRobot.pushPosition();
         myRobot.driveForward();
         sleep(1550);
         myRobot.turnRight();

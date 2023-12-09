@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,8 +15,6 @@ import org.firstinspires.ftc.teamcode.autonomous.enums.PropPosition;
 @Autonomous(name = "Blue Far", group = "Linear OpMode")
 public class BlueFar extends LinearOpMode {
     CenterStageRobot myRobot;
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-    Telemetry dashTelemetry = dashboard.getTelemetry();
     ElapsedTime runtime = new ElapsedTime();
     TensorFlow tf;
     Movements myMovements;

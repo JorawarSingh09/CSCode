@@ -20,9 +20,7 @@ public class CompetitionTeleop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         myRobot = new CenterStageRobot(hardwareMap, telemetry);
-        dashboard = FtcDashboard.getInstance();
-
-        myRobot.startPosition();
+//        myRobot.startPosition();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
