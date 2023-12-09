@@ -22,11 +22,6 @@ public interface AutonomousBase {
     public void dropPixelRight();
 
     /**
-     * take robot to park and drop another pixel in
-     */
-    public void park();
-
-    /**
      * drop a pixel into parking area by shaking
      */
     public void shakePixel();

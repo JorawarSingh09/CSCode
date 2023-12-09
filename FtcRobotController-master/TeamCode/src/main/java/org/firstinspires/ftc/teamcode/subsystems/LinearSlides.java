@@ -91,7 +91,7 @@ public class LinearSlides {
 
     public void topPosition(){
         // power at 80
-        setPosition(1550);
+        setPosition(1200);
     }
 
     public void climbPosition(){
