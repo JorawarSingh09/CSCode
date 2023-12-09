@@ -8,16 +8,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
-import org.firstinspires.ftc.teamcode.autonomous.AutonomousBase;
-import org.firstinspires.ftc.teamcode.autonomous.TFBase;
+import org.firstinspires.ftc.teamcode.autonomous.interfaces.AutonomousBase;
+import org.firstinspires.ftc.teamcode.autonomous.interfaces.TFBase;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Disabled
 @Autonomous(name = "BLUE COMP VISION: close - Needs to be tested",
         group = "Linear OpMode")
+@Disabled
 public class BlueCloseComputerVision extends LinearOpMode implements TFBase, AutonomousBase {
     private static final String TFOD_MODEL_ASSET = "bluepropRESMED.tflite";
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/bluepropRESMED.tflite";

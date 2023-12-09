@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous.OLDCompVision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,16 +10,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
-import org.firstinspires.ftc.teamcode.autonomous.AutonomousBase;
-import org.firstinspires.ftc.teamcode.autonomous.TFBase;
+import org.firstinspires.ftc.teamcode.autonomous.interfaces.TFBase;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
-
-@Config
 @Autonomous(name = "CompVisionTest",
         group = "Linear OpMode")
+@Disabled
 public class RedCompTest extends LinearOpMode implements  TFBase {
     CenterStageRobot myRobot;
     FtcDashboard dashboard = FtcDashboard.getInstance();

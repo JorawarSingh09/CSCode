@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.autonomous.normal;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
-import org.firstinspires.ftc.teamcode.autonomous.AutonomousBase;
+import org.firstinspires.ftc.teamcode.autonomous.interfaces.AutonomousBase;
 
 @Autonomous(name = "Red: close NEEDS TO BE TESTED", group = "Linear OpMode")
+@Disabled
 public class RedCloseGuess extends LinearOpMode implements AutonomousBase {
     CenterStageRobot myRobot;
     public static int driveToScanArea = 1300, turnDistance = 300;

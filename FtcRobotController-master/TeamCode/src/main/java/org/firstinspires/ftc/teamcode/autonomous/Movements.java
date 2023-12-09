@@ -1,16 +1,15 @@
-package org.firstinspires.ftc.teamcode.autonomous.compVision;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
-import org.firstinspires.ftc.teamcode.autonomous.AutonomousBase;
-import org.firstinspires.ftc.teamcode.autonomous.TFBase;
+import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMode;
+import org.firstinspires.ftc.teamcode.autonomous.interfaces.AutonomousBase;
 
-public class TeamPropMovements extends LinearOpMode implements AutonomousBase {
+public class Movements extends LinearOpMode implements AutonomousBase {
 
     CenterStageRobot myRobot;
-    public TeamPropMovements(CenterStageRobot myRobot){
+    public Movements(CenterStageRobot myRobot){
         this.myRobot = myRobot;
     }
     @Override
@@ -74,6 +73,68 @@ public class TeamPropMovements extends LinearOpMode implements AutonomousBase {
 
     @Override
     public void shakePixel() {
+        myRobot.driveBack();
+        sleep(1100);
+        myRobot.driveStop();
+        myRobot.strafeLeft();
+        sleep(4000);
+        myRobot.driveForward();
+        sleep(2000);
+        myRobot.strafeLeft();
+        sleep(2000);
+        myRobot.driveStop();
+    }
+
+    public void park(ParkingMode parkMode){
+        switch(parkMode){
+            case REDFAR: parkRedFar();
+            case BLUEFAR: parkBlueFar();
+            case REDCLOSE: parkRedClose();
+            case BLUECLOSE: parkBlueClose();
+        }
+        shakePixel();
+    }
+
+    private void parkBlueFar(){
+        myRobot.driveBack();
+        sleep(1200);
+        myRobot.strafeLeft();
+        sleep(8000);
+        myRobot.driveStop();
+        myRobot.driveForward();
+        sleep(1900);
+        myRobot.strafeLeft();
+        sleep(1500);
+        myRobot.driveStop();
+    }
+
+    private void parkBlueClose(){
+        myRobot.driveBack();
+        sleep(1100);
+        myRobot.driveStop();
+        myRobot.strafeLeft();
+        sleep(4000);
+        myRobot.driveForward();
+        sleep(2000);
+        myRobot.strafeLeft();
+        sleep(2000);
+        myRobot.driveStop();
+    }
+
+    private void parkRedFar(){
+        myRobot.driveBack();
+        sleep(1200);
+        myRobot.strafeRight();
+        sleep(8000);
+        myRobot.driveStop();
+        myRobot.driveForward();
+        sleep(1900);
+        myRobot.strafeRight();
+        sleep(1500);
+        myRobot.driveStop();
+    }
+
+    private void parkRedClose(){
         myRobot.driveBack();
         sleep(1100);
         myRobot.driveStop();

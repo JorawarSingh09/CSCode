@@ -1,7 +1,9 @@
-#Sun Dec 10 02:59:56 AEDT 2023
+#Sun Dec 10 04:09:39 AEDT 2023
 base.0=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeLibDexDebug\\10\\classes.dex
 base.10=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
+base.11=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\3\\classes.dex
+base.12=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\9\\classes.dex
 base.2=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeLibDexDebug\\11\\classes.dex
 base.3=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeLibDexDebug\\8\\classes.dex
 base.4=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
@@ -13,6 +15,8 @@ base.9=C\:\\Users\\jora9\\Documents\\FTC\\FtcRobotController-master\\TeamCode\\b
 path.0=classes.dex
 path.1=10/classes.dex
 path.10=classes2.dex
+path.11=3/classes.dex
+path.12=9/classes.dex
 path.2=11/classes.dex
 path.3=8/classes.dex
 path.4=0/classes.dex
@@ -24,6 +28,8 @@ path.9=8/classes.dex
 renamed.0=classes.dex
 renamed.1=classes2.dex
 renamed.10=classes11.dex
+renamed.11=classes12.dex
+renamed.12=classes13.dex
 renamed.2=classes3.dex
 renamed.3=classes4.dex
 renamed.4=classes5.dex

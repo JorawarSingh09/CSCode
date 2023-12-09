@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.compVision;
+package org.firstinspires.ftc.teamcode.autonomous.enums;
 
 public enum PropPosition {
     LEFT,
