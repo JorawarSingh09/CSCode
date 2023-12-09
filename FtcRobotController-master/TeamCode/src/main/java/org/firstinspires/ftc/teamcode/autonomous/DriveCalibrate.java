@@ -6,17 +6,20 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.CenterStageRobot;
+import org.firstinspires.ftc.teamcode.autonomous.enums.ParkingMode;
 
-@Disabled
 @Autonomous(name = "USED FOR TESTING ONLY", group = "Linear OpMode")
 public class DriveCalibrate extends LinearOpMode {
     CenterStageRobot myRobot;
+
+    Movements myMovements;
     Gamepad driver;
     Gamepad operator;
 
     @Override
     public void runOpMode() throws InterruptedException {
         myRobot = new CenterStageRobot(hardwareMap, telemetry);
+        myMovements = new Movements(myRobot);
 
         myRobot.startPosition();
 
@@ -24,21 +27,9 @@ public class DriveCalibrate extends LinearOpMode {
         telemetry.update();
         waitForStart();
         boolean canRun = true;
-
+        myMovements.park(ParkingMode.REDCLOSE);
         while(opModeIsActive() && canRun){
-            myRobot.driveForward();
-            sleep(1300);
-            myRobot.turnLeft();
-            sleep(800);
-            myRobot.driveForward();
-            sleep(150);
-            myRobot.driveStop();
-            myRobot.pickupPosition();
-            myRobot.driveBack();
-            sleep(450);
-            myRobot.driveStop();
-            myRobot.closeClaw();
-            myRobot.drivePosition();
+
 
 
 
