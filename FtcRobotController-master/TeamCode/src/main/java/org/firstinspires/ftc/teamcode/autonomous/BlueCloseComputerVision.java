@@ -23,7 +23,7 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
     CenterStageRobot myRobot;
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
-    public int calibratedCenter = 350, measuredVisionError = 40;
+    public int calibratedCenter = 350, measuredVisionError = 60;
     public static int driveToScanArea = 1300, turnDistance = 300;
     private ElapsedTime runtime = new ElapsedTime();
     @Override
@@ -40,7 +40,8 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
 
         runtime.reset();
         while(opModeIsActive() && canRun){
-            if(runtime.seconds() > 2) {
+            myRobot.pushPosition();
+            if(runtime.seconds() > 5) {
                 //give the robot some time to find the object
                 Recognition foundProp = getBestFit();
                 if (foundProp == null) {
@@ -88,7 +89,7 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
     @Override
     public void dropPixelCenter() {
         myRobot.driveForward();
-        sleep(1800);
+        sleep(1550);
         myRobot.driveStop();
         myRobot.strafeRight();
         sleep(400);
@@ -105,11 +106,11 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
     @Override
     public void dropPixelLeft() {
         myRobot.driveForward();
-        sleep(1300);
+        sleep(1600);
         myRobot.turnLeft();
         sleep(800);
         myRobot.driveForward();
-        sleep(150);
+        sleep(120);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveBack();
@@ -122,11 +123,11 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
     @Override
     public void dropPixelRight() {
         myRobot.driveForward();
-        sleep(1300);
+        sleep(1550);
         myRobot.turnRight();
         sleep(800);
         myRobot.driveForward();
-        sleep(150);
+        sleep(120);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveBack();

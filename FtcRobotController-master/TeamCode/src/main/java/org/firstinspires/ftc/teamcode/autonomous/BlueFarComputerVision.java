@@ -23,7 +23,7 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
     CenterStageRobot myRobot;
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
-    public int calibratedCenter = 350, measuredVisionError = 40;
+    public int calibratedCenter = 350, measuredVisionError = 60;
     public static int driveToScanArea = 1300, turnDistance = 300;
     private ElapsedTime runtime = new ElapsedTime();
     @Override
@@ -40,7 +40,8 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
 
         runtime.reset();
         while(opModeIsActive() && canRun){
-            if(runtime.seconds() > 2) {
+            myRobot.pushPosition();
+            if(runtime.seconds() > 5) {
                 //give the robot some time to find the object
                 Recognition foundProp = getBestFit();
                 if (foundProp == null) {
@@ -88,7 +89,6 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
 
     @Override
     public void dropPixelCenter() {
-        myRobot.pushPosition();
         myRobot.driveForward();
         sleep(1550);
         myRobot.driveStop();
@@ -105,7 +105,7 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
     @Override
     public void dropPixelLeft() {
         myRobot.driveForward();
-        sleep(1300);
+        sleep(1600);
         myRobot.turnLeft();
         sleep(800);
         myRobot.driveForward();
@@ -122,7 +122,7 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
     @Override
     public void dropPixelRight() {
         myRobot.driveForward();
-        sleep(1300);
+        sleep(1550);
         myRobot.turnRight();
         sleep(800);
         myRobot.driveForward();

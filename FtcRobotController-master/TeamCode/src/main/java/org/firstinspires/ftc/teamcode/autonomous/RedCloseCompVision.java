@@ -73,17 +73,19 @@ public class RedCloseCompVision extends LinearOpMode implements AutonomousBase, 
         boolean canRun = true;
         runtime.reset();
         while(opModeIsActive() && canRun){
+            myRobot.pushPosition();
             // Stop infront of team prop and find where it is, COMP VISION STUFF HERE
             // check if Prop is in center ie, close to 450
             // we want to stop where we can see all three positions
             Recognition foundProp = getBestFit();
-            if(runtime.seconds() > 2) {
+            if(runtime.seconds() > 5) {
                 if (foundProp == null) {
                     //run default auto
                     defaultDropAndPark();
                     canRun = false; // make sure loop doesn't run again
                     telemetry.addData("I FOUND NOTHING", "try another position");
-                } else {
+                }
+                else {
                     //seek prop
                     double xLoc = (foundProp.getLeft() + foundProp.getRight()) / 2;
                     telemetry.addData("current Location of Prop: ", xLoc);
@@ -91,16 +93,18 @@ public class RedCloseCompVision extends LinearOpMode implements AutonomousBase, 
                     // calibratedCenter +- error
                     if (xLoc < calibratedCenter - measuredVisionError) {
                         // TODO make sure this is left of robot
-                        dropPixelRight();
+                        dropPixelLeft();
                         canRun = false; // make sure loop doesn't run again
                         telemetry.addData("I NEED TO GO: ", "LEFT");
-                    } else if (xLoc > calibratedCenter + measuredVisionError) {
+                    }
+                    else if (xLoc > calibratedCenter + measuredVisionError) {
                         // TODO make sure this is right of the robot
                         dropPixelRight();
                         canRun = false; // make sure loop doesn't run again
                         telemetry.addData("I NEED TO GO: ", "RIGHT");
 
-                    } else {
+                    }
+                    else {
                         // if its in the center we can just run the defualt auto
                         defaultDropAndPark();
                         canRun = false; // make sure loop doesn't run again
@@ -258,9 +262,8 @@ public class RedCloseCompVision extends LinearOpMode implements AutonomousBase, 
 
     @Override
     public void dropPixelCenter() {
-        myRobot.pushPosition();
         myRobot.driveForward();
-        sleep(1800);
+        sleep(1550);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveStop();
@@ -275,7 +278,7 @@ public class RedCloseCompVision extends LinearOpMode implements AutonomousBase, 
     @Override
     public void dropPixelLeft() {
         myRobot.driveForward();
-        sleep(1300);
+        sleep(1600);
         myRobot.turnLeft();
         sleep(800);
         myRobot.driveForward();
@@ -292,7 +295,7 @@ public class RedCloseCompVision extends LinearOpMode implements AutonomousBase, 
     @Override
     public void dropPixelRight() {
         myRobot.driveForward();
-        sleep(1300);
+        sleep(1550);
         myRobot.turnRight();
         sleep(800);
         myRobot.driveForward();
