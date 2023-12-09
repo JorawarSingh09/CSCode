@@ -21,7 +21,8 @@ public class RedFarGuess extends LinearOpMode implements AutonomousBase {
         boolean canRun = true;
 
         while(opModeIsActive() && canRun){
-
+            myRobot.pushPosition();
+            defaultDropAndPark();
         }
     }
 

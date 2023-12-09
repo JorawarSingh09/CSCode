@@ -258,6 +258,7 @@ public class RedCloseCompVision extends LinearOpMode implements AutonomousBase, 
         dropPixelCenter();
         park();
         shakePixel();
+
     }
 
     @Override
@@ -314,19 +315,17 @@ public class RedCloseCompVision extends LinearOpMode implements AutonomousBase, 
         myRobot.driveBack();
         sleep(1100);
         myRobot.driveStop();
-        myRobot.strafeRight();
+        myRobot.strafeLeft();
         sleep(4000);
         myRobot.driveForward();
         sleep(2000);
-        myRobot.strafeRight();
+        myRobot.strafeLeft();
         sleep(2000);
         myRobot.driveStop();
     }
 
     @Override
     public void shakePixel() {
-        myRobot.turnLeft();
-        sleep(1600);//turn 180 degrees
         myRobot.turnLeft();
         sleep(200);
         myRobot.turnRight();

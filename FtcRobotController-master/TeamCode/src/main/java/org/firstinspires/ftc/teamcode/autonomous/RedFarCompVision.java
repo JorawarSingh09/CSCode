@@ -256,14 +256,13 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     @Override
     public void defaultDropAndPark() {
         dropPixelCenter();
-        park();
+//        park();
         shakePixel();
     }
 
-    @Override
     public void dropPixelCenter() {
         myRobot.driveForward();
-        sleep(1800);
+        sleep(1550);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveStop();
@@ -312,7 +311,7 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
     @Override
     public void park() {
         myRobot.driveBack();
-        sleep(1100);
+        sleep(1200);
         myRobot.strafeRight();
         sleep(8000);
         myRobot.driveStop();
@@ -325,8 +324,6 @@ public class RedFarCompVision extends LinearOpMode implements AutonomousBase, TF
 
     @Override
     public void shakePixel() {
-        myRobot.turnLeft();
-        sleep(1600);//turn 180 degrees
         myRobot.turnLeft();
         sleep(200);
         myRobot.turnRight();

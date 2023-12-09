@@ -86,21 +86,18 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
         shakePixel();
     }
 
-    @Override
     public void dropPixelCenter() {
         myRobot.driveForward();
         sleep(1550);
         myRobot.driveStop();
-        myRobot.strafeRight();
-        sleep(400);
         myRobot.pickupPosition();
+        myRobot.driveStop();
+        sleep(100);
         myRobot.driveBack();
-        sleep(500);
+        sleep(200);
+        myRobot.driveStop();
         myRobot.closeClaw();
         myRobot.drivePosition();
-        myRobot.strafeLeft();
-        sleep(400);
-        myRobot.driveStop();
     }
 
     @Override
@@ -110,7 +107,7 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
         myRobot.turnLeft();
         sleep(800);
         myRobot.driveForward();
-        sleep(120);
+        sleep(150);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveBack();
@@ -127,7 +124,7 @@ public class BlueCloseComputerVision extends LinearOpMode implements TFBase, Aut
         myRobot.turnRight();
         sleep(800);
         myRobot.driveForward();
-        sleep(120);
+        sleep(150);
         myRobot.driveStop();
         myRobot.pickupPosition();
         myRobot.driveBack();

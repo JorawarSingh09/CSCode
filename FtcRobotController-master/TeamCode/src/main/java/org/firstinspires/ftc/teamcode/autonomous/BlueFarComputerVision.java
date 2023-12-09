@@ -82,7 +82,7 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
     @Override
     public void defaultDropAndPark() {
         dropPixelCenter();
-        park();
+//        park();
         shakePixel();
 
     }
@@ -139,7 +139,7 @@ public class BlueFarComputerVision extends LinearOpMode implements TFBase, Auton
     @Override
     public void park() {
         myRobot.driveBack();
-        sleep(1100);
+        sleep(1200);
         myRobot.strafeLeft();
         sleep(8000);
         myRobot.driveStop();
